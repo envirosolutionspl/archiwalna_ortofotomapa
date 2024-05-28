@@ -82,7 +82,7 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap>icon_pw2.png</pixmap>
+         <pixmap>icons/icon_pw2.png</pixmap>
         </property>
         <property name="scaledContents">
          <bool>true</bool>
@@ -212,7 +212,7 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap>drzewiec.png</pixmap>
+         <pixmap>icons/drzewiec.png</pixmap>
         </property>
         <property name="scaledContents">
          <bool>true</bool>

@@ -184,7 +184,7 @@ class ArchiwalnaOrtofotomapa:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
-        icon_path = ':/plugins/archiwalna_ortofotomapa/icon_pw2.png'
+        icon_path = ':/plugins/archiwalna_ortofotomapa/icons/icon_pw2.png'
         self.add_action(
             icon_path,
             text=self.tr(u'Archiwalna Ortofotomapa'),

@@ -1,6 +1,6 @@
 <RCC>
   <qresource prefix="/plugins/archiwalna_ortofotomapa">
-    <file>drzewiec.png</file>
-    <file>icon_pw2.png</file>
+    <file>icons/drzewiec.png</file>
+    <file>icons/icon_pw2.png</file>
   </qresource>
 </RCC>
