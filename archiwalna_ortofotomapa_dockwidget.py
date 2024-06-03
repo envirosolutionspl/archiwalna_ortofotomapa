@@ -38,6 +38,7 @@ class ArchiwalnaOrtofotomapaDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
     def __init__(self, parent=None):
         """Constructor."""
+
         super(ArchiwalnaOrtofotomapaDockWidget, self).__init__(parent)
         # Set up the user interface from Designer.
         # After setupUI you can access any designer object by doing
@@ -46,6 +47,7 @@ class ArchiwalnaOrtofotomapaDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
         self.img_main.setMargin(9)
+
 
     def closeEvent(self, event):
         self.closingPlugin.emit()

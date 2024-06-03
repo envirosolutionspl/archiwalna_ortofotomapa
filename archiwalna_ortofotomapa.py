@@ -22,6 +22,7 @@
  ***************************************************************************/
  This script initializes the plugin, making it known to QGIS.
 """
+
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QToolBar, QApplication
@@ -106,7 +107,7 @@ class ArchiwalnaOrtofotomapa:
         """
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
         return QCoreApplication.translate('ArchiwalnaOrtofotomapa', message)
-
+    
 
     def add_action(
         self,
@@ -119,6 +120,7 @@ class ArchiwalnaOrtofotomapa:
         status_tip=None,
         whats_this=None,
         parent=None):
+
         """Add a toolbar icon to the toolbar.
 
         :param icon_path: Path to the icon for this action. Can be a resource
@@ -192,10 +194,9 @@ class ArchiwalnaOrtofotomapa:
             callback=self.run,
             parent=self.iface.mainWindow())
 
+
     def onClosePlugin(self):
         """Cleanup necessary items here when plugin dockwidget is closed"""
-
-        #print "** CLOSING ArchiwalnaOrtofotomapa"
 
         # disconnects
         self.dockwidget.closingPlugin.disconnect(self.onClosePlugin)
@@ -212,8 +213,6 @@ class ArchiwalnaOrtofotomapa:
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
 
-        #print "** UNLOAD ArchiwalnaOrtofotomapa"
-
         for action in self.actions:
             self.iface.removePluginMenu(
                 self.tr(u'&EnviroSolutions'),
@@ -224,6 +223,7 @@ class ArchiwalnaOrtofotomapa:
         del self.toolbar
 
     #--------------------------------------------------------------------------
+
 
     def run(self):
         """Run method that loads and starts the plugin"""
@@ -274,30 +274,46 @@ class ArchiwalnaOrtofotomapa:
             #reopened
             pass
 
+
     def orto_removal(self):
+        """Funkcja wyłączająca okno z wtyczką przy usunięciu warstwy z ortofotomapą"""
+
         self.dockwidget.close()
         self.orto = None
 
+
     def slider_changed(self):
+        """Funkcja kontroluje rok jaki ma być wyświetlany przy przesuwaniu paska"""
+
         slider = self.dockwidget.sender()
         self.dockwidget.timeLabel.setText(str(slider.value()))
         if not self.isSliderPressed:
             self.changeOrtoLayer(slider)
 
+
     def slider_moved(self):
+        """Funkcja nic nie robi jeżeli pasek został przesuniętu"""
+
         pass
 
+
     def slider_pressed(self):
+        """Funkcja kontroluje parametr odpowiadający za akcje po wciśnięciu slidera"""
+
         slider = self.dockwidget.sender()
         self.isSliderPressed = True
 
+
     def slider_released(self):
+        """Funkcja kontroluje parametr odpowiadający za akcje po puszczeniu slidera"""
+
         slider = self.dockwidget.sender()
         self.isSliderPressed = False
         self.changeOrtoLayer(slider)
 
+
     def changeOrtoLayer(self, slider):
-        # SET DATASOURCE AND RELOAD DATA
+        """Funkcja zmienia nazwę warstwy z orto po zmianie roku który ma wyświetlać"""
 
         uri = self.makeDataSourceUri(slider.value())
         self.orto.dataProvider().setDataSourceUri(uri)
@@ -305,8 +321,10 @@ class ArchiwalnaOrtofotomapa:
         # self.orto.dataProvider().reloadData() #QGIS 3.12 and above
         self.orto.setName("Ortofotomapa Archiwalna %d" % slider.value())
 
+
     def makeDataSourceUri(self, year):
-        # serviceUrl = "http://mapy.geoportal.gov.pl/wss/service/img/guest/ORTO_TIME/MapServer/WMSServer"
+        """Funkcja edytuje warstwę z orto i zmienia rok, z którego jest ono opracowane"""
+        
         serviceUrl = "https://mapy.geoportal.gov.pl/wss/service/PZGIK/ORTO/WMS/StandardResolutionTime"
         return "IgnoreGetFeatureInfoUrl=1&IgnoreGetMapUrl=1&contextualWMSLegend=0&crs=EPSG:2180&format=image/jpeg&layers=Raster&styles=&url=" \
                + serviceUrl + \
