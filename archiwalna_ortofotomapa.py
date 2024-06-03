@@ -35,6 +35,7 @@ import os.path
 from . import PLUGIN_VERSION as plugin_version
 
 """Wersja wtyczki"""
+plugin_version = '1.0.6'
 plugin_name = 'Archiwalna Ortofotomapa'
 
 class ArchiwalnaOrtofotomapa:
@@ -256,6 +257,7 @@ class ArchiwalnaOrtofotomapa:
             self.dockwidget.closingPlugin.connect(self.onClosePlugin)
 
             # informacje o wersji
+            self.dockwidget.setWindowTitle('%s %s' % (plugin_name, plugin_version))
             self.dockwidget.lbl_pluginVersion.setText('%s %s' % (plugin_name, plugin_version))
 
             # show the dockwidget
