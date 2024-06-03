@@ -6,8 +6,8 @@
 name=Archiwalna Ortofotomapa
 qgisMinimumVersion=3.0
 description=Pozwala na wczytanie do QGIS archiwalnej ortofotomapy z geoportal.gov.pl. EN: Allows user to add archival orthophotomaps of Poland
-version=1.0.5
-author=EnviroSolutions Sp. z o.o. - Michał Włoga
+version=1.0.6
+author=EnviroSolutions Sp. z o.o.
 email=office@envirosolutions.pl
 
 about=Pozwala na podczytanie w QGIS archiwalnej ortofotomapy na podstawie usług z geoportal.gov.pl.
@@ -21,25 +21,27 @@ repository=https://github.com/envirosolutionspl/archiwalna_ortofotomapa
 hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
 changelog=
-  Wersja 1.0.5
-  * Aktualizacja QGIS Feed dla QGIS 3.30 i nowszych
-  Wersja 1.0.4
-  * Zmiana adresu usługi ORTOTIME
-  Wersja 1.0.3
-  * Poprawa błędów dla wersji poniżej 3.10
-  Wersja 1.0.2
-  * Dodanie wiadomości o nowościach GIS
-  Wersja 1.0.1
-  * Dodanie możliwości korzystania z suwaka przy pomocy klawiatury
-  Wersja 1.0
-  * Utworzenie wtyczki
+  Wersja 1.0.6
+  * Poprawa UI
+#  Wersja 1.0.5
+#  * Aktualizacja QGIS Feed dla QGIS 3.30 i nowszych
+#  Wersja 1.0.4
+#  * Zmiana adresu usługi ORTOTIME
+#  Wersja 1.0.3
+#  * Poprawa błędów dla wersji poniżej 3.10
+#  Wersja 1.0.2
+#  * Dodanie wiadomości o nowościach GIS
+#  Wersja 1.0.1
+#  * Dodanie możliwości korzystania z suwaka przy pomocy klawiatury
+#  Wersja 1.0
+#  * Utworzenie wtyczki
 
 # Tags are comma separated with spaces allowed
 tags=python, Poland, Polska, Orthophotomap, ortofotomapa, geoportal, GUGiK, satelita, podkład, basemap, EnviroSolutions, time, archiwalna, old
 
-homepage=https://www.envirosolutions.pl/archiwalna-ortofotomapa
+homepage=https://github.com/envirosolutionspl/archiwalna_ortofotomapa
 category=Plugins
-icon=icon_pw2.png
+icon=icons/icon_pw2.png
 # experimental flag
 experimental=False
 

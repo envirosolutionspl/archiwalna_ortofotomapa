@@ -59,7 +59,7 @@ class Ui_ArchiwalnaOrtofotomapaDockWidgetBase(object):
         self.label_5 = QtWidgets.QLabel(self.dockWidgetContents)
         self.label_5.setMaximumSize(QtCore.QSize(20, 20))
         self.label_5.setText("")
-        self.label_5.setPixmap(QtGui.QPixmap(":/plugins/archiwalna_ortofotomapa/drzewiec.png"))
+        self.label_5.setPixmap(QtGui.QPixmap(":/plugins/archiwalna_ortofotomapa/icons/drzewiec.png"))
         self.label_5.setScaledContents(True)
         self.label_5.setObjectName("label_5")
         self.horizontalLayout_2.addWidget(self.label_5)
