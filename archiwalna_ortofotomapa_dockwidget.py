@@ -46,7 +46,6 @@ class ArchiwalnaOrtofotomapaDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
         self.img_main.setMargin(9)
-        self.label_6.setMargin(3)
 
     def closeEvent(self, event):
         self.closingPlugin.emit()
