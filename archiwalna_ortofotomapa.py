@@ -36,7 +36,7 @@ import os.path
 from . import PLUGIN_VERSION as plugin_version
 
 """Wersja wtyczki"""
-plugin_version = '1.0.6'
+plugin_version = '1.0.7'
 plugin_name = 'Archiwalna Ortofotomapa'
 
 class ArchiwalnaOrtofotomapa:
@@ -187,7 +187,7 @@ class ArchiwalnaOrtofotomapa:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
-        icon_path = ':/plugins/archiwalna_ortofotomapa/icons/icon_pw2.png'
+        icon_path = ':/plugins/archiwalna_ortofotomapa/icons/archiwalna_logo.svg'
         self.add_action(
             icon_path,
             text=self.tr(u'Archiwalna Ortofotomapa'),

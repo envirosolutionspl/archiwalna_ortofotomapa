@@ -46,7 +46,7 @@ class ArchiwalnaOrtofotomapaDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         # http://doc.qt.io/qt-5/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
-        self.img_main.setMargin(9)
+        self.img_main.setMargin(3)
 
 
     def closeEvent(self, event):
