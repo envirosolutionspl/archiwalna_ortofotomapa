@@ -41,7 +41,7 @@ tags=python, Poland, Polska, Orthophotomap, ortofotomapa, geoportal, GUGiK, sate
 
 homepage=https://github.com/envirosolutionspl/archiwalna_ortofotomapa
 category=Plugins
-icon=icons/icon_pw2.png
+icon=icons/archiwalna_logo.svg
 # experimental flag
 experimental=False
 
