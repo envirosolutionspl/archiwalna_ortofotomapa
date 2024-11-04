@@ -25,8 +25,11 @@
 
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QToolBar, QApplication
+from qgis.PyQt.QtWidgets import QAction, QToolBar, QApplication, QWidget, QLabel, QDialog, QComboBox
+from PyQt5 import uic
 from datetime import datetime
+from qgis.core import QgsSettings
+from .qgis_feed import QgisFeedDialog
 # Initialize Qt resources from file resources.py
 from .resources import *
 from qgis.core import QgsRasterLayer, QgsProject, Qgis
@@ -51,9 +54,21 @@ class ArchiwalnaOrtofotomapa:
         :type iface: QgsInterface
         """
 
+        self.settings = QgsSettings() 
+
         if Qgis.QGIS_VERSION_INT >= 31000:
             from .qgis_feed import QgisFeed
-            self.feed = QgisFeed()
+
+            #qgis feed
+            self.selected_industry = self.settings.value("selected_industry", None)
+            show_dialog = self.settings.value("showDialog", True, type=bool)
+            
+            if self.selected_industry is None and show_dialog:
+                self.showBranchSelectionDialog()
+        
+            select_indust_session = self.settings.value('selected_industry')
+            
+            self.feed = QgisFeed(selected_industry=select_indust_session, plugin_name=plugin_name)
             self.feed.initFeed()
 
         # Save reference to the QGIS interface
@@ -274,6 +289,15 @@ class ArchiwalnaOrtofotomapa:
             #reopened
             pass
 
+    def showBranchSelectionDialog(self):
+        self.qgisfeed_dialog = QgisFeedDialog()
+
+        if self.qgisfeed_dialog.exec_() == QDialog.Accepted:
+            self.selected_branch = self.qgisfeed_dialog.comboBox.currentText()
+            
+            #Zapis w QGIS3.ini
+            self.settings.setValue("selected_industry", self.selected_branch)  
+            self.settings.setValue("showDialog", False) 
 
     def orto_removal(self):
         """Funkcja wyłączająca okno z wtyczką przy usunięciu warstwy z ortofotomapą"""
