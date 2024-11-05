@@ -10,7 +10,7 @@ Archiwalna Ortofotomapa to bezpłatna wtyczka stworzona dla programu QGIS , któ
 
 ## Wymagania
 
-- Program QGIS w wersji 3.0 lub nowszej.
+- Program QGIS w wersji 3.22 lub nowszej.
 
 ## Instrukcja pobrania
 1. Wtyczkę należy zainstalować w QGISie jako ZIP bądź wgrać pliki wtyczki do lokalizacji C:\Users\User\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins.
@@ -37,7 +37,7 @@ The Historical Orthophotomap is a free plugin created for QGIS, allowing users t
 
 ## Requirements
 
-- QGIS software version 3.0 or higher.
+- QGIS software version 3.22 or higher.
 
 ## Installation Instructions
 
