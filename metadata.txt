@@ -23,6 +23,7 @@ hasProcessingProvider=no
 changelog=
   Wersja 1.0.8
   * Aktualizacja QGIS-feed
+  * Zmiana minimalnej wersji QGIS na 3.22
 #  Wersja 1.0.7
 #  * Zmiana logo wtyczki i EnviroSolutions
 #  Wersja 1.0.6
