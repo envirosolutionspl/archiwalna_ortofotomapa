@@ -39,7 +39,7 @@ import os.path
 from . import PLUGIN_VERSION as plugin_version
 
 """Wersja wtyczki"""
-plugin_version = '1.0.8'
+plugin_version = '1.0.9'
 plugin_name = 'Archiwalna Ortofotomapa'
 
 class ArchiwalnaOrtofotomapa:
