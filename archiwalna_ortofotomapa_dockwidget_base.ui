@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>305</width>
-    <height>217</height>
+    <width>344</width>
+    <height>220</height>
    </rect>
   </property>
   <property name="windowIcon">
@@ -92,7 +92,10 @@
          <bool>true</bool>
         </property>
         <property name="margin">
-         <number>3</number>
+         <number>10</number>
+        </property>
+        <property name="indent">
+         <number>-1</number>
         </property>
        </widget>
       </item>
@@ -107,7 +110,34 @@
         <property name="verticalSpacing">
          <number>0</number>
         </property>
-        <item row="1" column="0">
+        <item row="2" column="1">
+         <widget class="QLabel" name="lbl_szkolenia">
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>15</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://envirosolutions.pl/oferta-szkoleniowa/?utm_source=stopka&amp;utm_medium=wtyczka&amp;utm_campaign=organic&amp;utm_term=archiwalna_ortofotomapa&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;SZKOLENIA GIS&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="openExternalLinks">
+           <bool>true</bool>
+          </property>
+          <property name="textInteractionFlags">
+           <set>Qt::TextBrowserInteraction</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="2" alignment="Qt::AlignHCenter">
          <widget class="QLabel" name="lbl_copyrights">
           <property name="maximumSize">
            <size>
@@ -121,7 +151,7 @@
            </font>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;© 2024 &lt;a href=&quot;http://www.envirosolutions.pl/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;EnviroSolutions Sp. z o.o.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;© 2025 EnviroSolutions Sp. z o.o.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="textFormat">
            <enum>Qt::RichText</enum>
@@ -137,7 +167,37 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="0" alignment="Qt::AlignHCenter">
+        <item row="2" column="0" alignment="Qt::AlignHCenter">
+         <widget class="QLabel" name="lbl_systemy">
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>15</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://envirosolutions.pl/systemy-opensource-gis/?utm_source=stopka&amp;utm_medium=wtyczka&amp;utm_campaign=organic&amp;utm_term=archiwalna_ortofotomapa&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;SYSTEMY GIS&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::RichText</enum>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="openExternalLinks">
+           <bool>true</bool>
+          </property>
+          <property name="textInteractionFlags">
+           <set>Qt::TextBrowserInteraction</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="2" alignment="Qt::AlignHCenter">
          <widget class="QLabel" name="lbl_pluginVersion">
           <property name="maximumSize">
            <size>
@@ -155,36 +215,6 @@
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="lbl_email">
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>15</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>8</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;mailto:office@envirosolutions.pl&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;ZAPRASZAMY DO WSPÓŁPRACY&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::RichText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="openExternalLinks">
-           <bool>true</bool>
-          </property>
-          <property name="textInteractionFlags">
-           <set>Qt::TextBrowserInteraction</set>
           </property>
          </widget>
         </item>
