@@ -37,9 +37,9 @@ from qgis.core import QgsRasterLayer, QgsProject, Qgis
 from .archiwalna_ortofotomapa_dockwidget import ArchiwalnaOrtofotomapaDockWidget
 import os.path
 from . import PLUGIN_VERSION as plugin_version
-from .constants import OLDEST_ORTO_YEAR
 
-"""Wersja wtyczki"""
+
+"""Plugin version"""
 plugin_version = '1.0.9'
 plugin_name = 'Archiwalna Ortofotomapa'
 
@@ -72,6 +72,7 @@ class ArchiwalnaOrtofotomapa:
 
         # Save reference to the QGIS interface
         self.iface = iface
+
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
 
@@ -99,7 +100,16 @@ class ArchiwalnaOrtofotomapa:
         #print "** INITIALIZING ArchiwalnaOrtofotomapa"
 
         self.pluginIsActive = False
-        self.dockwidget = None
+        
+        # Create the dockwidget and keep reference
+        self.dockwidget = ArchiwalnaOrtofotomapaDockWidget()
+        
+        # Connect to slider signals directly (once during initialization)
+        self.dockwidget.timeSlider.valueChanged.connect(self.sliderChanged)
+        self.dockwidget.timeSlider.sliderReleased.connect(self.sliderReleased)
+        self.dockwidget.timeSlider.sliderPressed.connect(self.sliderPressed)
+        self.dockwidget.timeSlider.sliderMoved.connect(self.sliderMoved)
+        self.dockwidget.closingPlugin.connect(self.onClosePlugin)
 
         self.canvas = self.iface.mapCanvas()
         self.orto = None
@@ -123,7 +133,7 @@ class ArchiwalnaOrtofotomapa:
         return QCoreApplication.translate('ArchiwalnaOrtofotomapa', message)
     
 
-    def add_action(
+    def addAction(
         self,
         icon_path,
         text,
@@ -202,7 +212,7 @@ class ArchiwalnaOrtofotomapa:
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
         icon_path = ':/plugins/archiwalna_ortofotomapa/icons/archiwalna_logo.svg'
-        self.add_action(
+        self.addAction(
             icon_path,
             text=self.tr(u'Archiwalna Ortofotomapa'),
             callback=self.run,
@@ -213,7 +223,7 @@ class ArchiwalnaOrtofotomapa:
         """Cleanup necessary items here when plugin dockwidget is closed"""
 
         # disconnects
-        self.dockwidget.closingPlugin.disconnect(self.onClosePlugin)
+        #self.dockwidget.closingPlugin.disconnect(self.onClosePlugin)
 
         # remove this statement if dockwidget is to remain
         # for reuse if plugin is reopened
@@ -247,34 +257,9 @@ class ArchiwalnaOrtofotomapa:
             #print "** STARTING ArchiwalnaOrtofotomapa"
             if self.orto:
                 self.orto.willBeDeleted.disconnect()
-            # dockwidget may not exist if:
-            #    first run of plugin
-            #    removed on close (see self.onClosePlugin method)
-            if self.dockwidget == None:
-                # Create the dockwidget (after translation) and keep reference
-                self.dockwidget = ArchiwalnaOrtofotomapaDockWidget()
-            # Eventy
-            slider = self.dockwidget.timeSlider
-
-            # oldest available date from SkorowidzOrtofomapy
-            slider.setMinimum(OLDEST_ORTO_YEAR)
-
-            # set initial slider position and range to current year
-            currentYear = datetime.now().year
-            slider.setMaximum(currentYear)
-            slider.setSliderPosition(currentYear)
-            self.dockwidget.timeLabel.setText(str(slider.value()))
-
-
-            self.isSliderPressed = False
-
-            slider.valueChanged.connect(self.slider_changed)
-            slider.sliderReleased.connect(self.slider_released)
-            slider.sliderPressed.connect(self.slider_pressed)
-            slider.sliderMoved.connect(self.slider_moved)
-
-            # connect to provide cleanup on closing of dockwidget
-            self.dockwidget.closingPlugin.connect(self.onClosePlugin)
+            
+            # Set slider to max year every time plugin is launched
+            self.dockwidget.setSliderToMaxYear()
 
             # informacje o wersji
             self.dockwidget.setWindowTitle('%s %s' % (plugin_name, plugin_version))
@@ -285,10 +270,10 @@ class ArchiwalnaOrtofotomapa:
             self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockwidget)
             self.dockwidget.show()
 
-            self.orto = QgsRasterLayer(self.makeDataSourceUri(slider.value()),
-                                       "Ortofotomapa Archiwalna %d" % slider.value(),
+            self.orto = QgsRasterLayer(self.makeDataSourceUri(self.dockwidget.timeSlider.value()),
+                                       "Ortofotomapa Archiwalna %d" % self.dockwidget.timeSlider.value(),
                                        'wms')
-            self.orto.willBeDeleted.connect(self.orto_removal)
+            self.orto.willBeDeleted.connect(self.ortoRemoval)
             QgsProject.instance().addMapLayer(self.orto)
         else:
             #reopened
@@ -304,59 +289,54 @@ class ArchiwalnaOrtofotomapa:
             self.settings.setValue("selected_industry", self.selected_branch)  
             self.settings.setValue("showDialog", False) 
 
-    def orto_removal(self):
-        """Funkcja wyłączająca okno z wtyczką przy usunięciu warstwy z ortofotomapą"""
+    def ortoRemoval(self):
+        """Function to remove the dockwidget and the orto layer when the layer is deleted"""
 
         self.dockwidget.close()
         self.orto = None
 
 
-    def slider_changed(self):
-        """Funkcja kontroluje rok jaki ma być wyświetlany przy przesuwaniu paska"""
+    def sliderChanged(self):
+        """Function to update the label with the current year"""
 
-        # jesli orto jeszcze nie ma to nie wykonuj nic
+        # Update the label with current year
+        self.dockwidget.timeLabel.setText(str(self.dockwidget.timeSlider.value()))
+        
         if self.orto is None:
             return
 
-        slider = self.dockwidget.sender()
-        self.dockwidget.timeLabel.setText(str(slider.value()))
-        if not self.isSliderPressed:
-            self.changeOrtoLayer(slider)
+        if not self.dockwidget.isSliderPressed:
+            self.changeOrtoLayer()
 
-
-    def slider_moved(self):
-        """Funkcja nic nie robi jeżeli pasek został przesuniętu"""
-
+    def sliderMoved(self):
+        """Function to do nothing if the slider is moved"""
         pass
 
 
-    def slider_pressed(self):
-        """Funkcja kontroluje parametr odpowiadający za akcje po wciśnięciu slidera"""
-
-        slider = self.dockwidget.sender()
-        self.isSliderPressed = True
+    def sliderPressed(self):
+        """Function to control the parameter responsible for actions after clicking the slider"""
+        self.dockwidget.isSliderPressed = True
 
 
-    def slider_released(self):
-        """Funkcja kontroluje parametr odpowiadający za akcje po puszczeniu slidera"""
-
-        slider = self.dockwidget.sender()
-        self.isSliderPressed = False
-        self.changeOrtoLayer(slider)
+    def sliderReleased(self):
+        """Function to control the parameter responsible for actions after releasing the slider"""
+        self.dockwidget.isSliderPressed = False
+        self.changeOrtoLayer()
 
 
-    def changeOrtoLayer(self, slider):
-        """Funkcja zmienia nazwę warstwy z orto po zmianie roku który ma wyświetlać"""
+    def changeOrtoLayer(self):
+        """Function to change the name of the orto layer after changing the year"""
 
-        uri = self.makeDataSourceUri(slider.value())
+        year = self.dockwidget.timeSlider.value()
+        uri = self.makeDataSourceUri(year)
         self.orto.dataProvider().setDataSourceUri(uri)
         self.orto.triggerRepaint()
         # self.orto.dataProvider().reloadData() #QGIS 3.12 and above
-        self.orto.setName("Ortofotomapa Archiwalna %d" % slider.value())
+        self.orto.setName("Ortofotomapa Archiwalna %d" % year)
 
 
     def makeDataSourceUri(self, year):
-        """Funkcja edytuje warstwę z orto i zmienia rok, z którego jest ono opracowane"""
+        """Function to edit the orto layer and change the year it is based on"""
         
         serviceUrl = "https://mapy.geoportal.gov.pl/wss/service/PZGIK/ORTO/WMS/StandardResolutionTime"
         return "IgnoreGetFeatureInfoUrl=1&IgnoreGetMapUrl=1&contextualWMSLegend=0&crs=EPSG:2180&format=image/jpeg&layers=Raster&styles=&url=" \

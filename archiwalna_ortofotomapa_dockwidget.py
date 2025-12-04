@@ -24,9 +24,11 @@
 """
 
 import os
+from datetime import datetime
 
 from qgis.PyQt import QtGui, QtWidgets, uic
 from qgis.PyQt.QtCore import pyqtSignal
+from .constants import OLDEST_ORTO_YEAR
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'archiwalna_ortofotomapa_dockwidget_base.ui'))
@@ -40,14 +42,33 @@ class ArchiwalnaOrtofotomapaDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         """Constructor."""
 
         super(ArchiwalnaOrtofotomapaDockWidget, self).__init__(parent)
-        # Set up the user interface from Designer.
+        # Set up the user interface from Designer.  
         # After setupUI you can access any designer object by doing
         # self.<objectname>, and you can use autoconnect slots - see
         # http://doc.qt.io/qt-5/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
         self.img_main.setMargin(3)
+        
+        # Store current year
+        self.currentYear = datetime.now().year
+        
+        # Initialize slider min/max values
+        self.timeSlider.setMinimum(OLDEST_ORTO_YEAR)
+        self.timeSlider.setMaximum(self.currentYear)
+        
+        # Internal state for slider
+        self.isSliderPressed = False
+        
+        # Set slider to current year by default
+        self.setSliderToMaxYear()
 
+    def setSliderToMaxYear(self):
+        """Sets the slider to the maximum year (current year)."""
+        self.currentYear = datetime.now().year
+        self.timeSlider.setMaximum(self.currentYear)
+        self.timeSlider.setSliderPosition(self.currentYear)
+        self.timeLabel.setText(str(self.currentYear))
 
     def closeEvent(self, event):
         self.closingPlugin.emit()
