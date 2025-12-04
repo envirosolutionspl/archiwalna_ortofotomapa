@@ -4,7 +4,7 @@
 
 [general]
 name=Archiwalna Ortofotomapa
-qgisMinimumVersion=3.22
+qgisMinimumVersion=3.28
 description=Pozwala na wczytanie do QGIS archiwalnej ortofotomapy z geoportal.gov.pl. EN: Allows user to add archival orthophotomaps of Poland
 version=1.0.9
 author=EnviroSolutions Sp. z o.o.
