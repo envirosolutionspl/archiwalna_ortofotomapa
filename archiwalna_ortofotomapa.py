@@ -37,6 +37,7 @@ from qgis.core import QgsRasterLayer, QgsProject, Qgis
 from .archiwalna_ortofotomapa_dockwidget import ArchiwalnaOrtofotomapaDockWidget
 import os.path
 from . import PLUGIN_VERSION as plugin_version
+from .constants import OLDEST_ORTO_YEAR
 
 """Wersja wtyczki"""
 plugin_version = '1.0.9'
@@ -254,9 +255,15 @@ class ArchiwalnaOrtofotomapa:
                 self.dockwidget = ArchiwalnaOrtofotomapaDockWidget()
             # Eventy
             slider = self.dockwidget.timeSlider
-            slider.setMinimum(1997)
+
+            # oldest available date from SkorowidzOrtofomapy
+            slider.setMinimum(OLDEST_ORTO_YEAR)
+
+            # set initial slider position and range to current year
             currentYear = datetime.now().year
             slider.setMaximum(currentYear)
+            slider.setSliderPosition(currentYear)
+            self.dockwidget.timeLabel.setText(str(slider.value()))
 
 
             self.isSliderPressed = False
@@ -306,6 +313,10 @@ class ArchiwalnaOrtofotomapa:
 
     def slider_changed(self):
         """Funkcja kontroluje rok jaki ma być wyświetlany przy przesuwaniu paska"""
+
+        # jesli orto jeszcze nie ma to nie wykonuj nic
+        if self.orto is None:
+            return
 
         slider = self.dockwidget.sender()
         self.dockwidget.timeLabel.setText(str(slider.value()))

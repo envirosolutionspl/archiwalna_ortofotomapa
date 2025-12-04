@@ -16,3 +16,6 @@ INDUSTRIES = {
     "it": "IT",
     "n": "Nieruchomości"
 }
+
+
+OLDEST_ORTO_YEAR = 1957
