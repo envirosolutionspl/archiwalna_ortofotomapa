@@ -5,7 +5,7 @@
 ## Opis
 
 Archiwalna Ortofotomapa to bezpłatna wtyczka stworzona dla programu QGIS , która umożliwia użytkownikom przeglądanie ortofotomap kraju z różnych okresów.
-<br>W prosty sposób można za pomocą suwaka wyświetlić ortofotomapę z konkretnego momentu z przeszłośći.
+<br>W prosty sposób można za pomocą suwaka wyświetlić ortofotomapę z konkretnego momentu z przeszłości.
 
 
 ## Wymagania
@@ -25,6 +25,10 @@ Archiwalna Ortofotomapa to bezpłatna wtyczka stworzona dla programu QGIS , któ
 2. Kliknij na ikonę Archiwalnej Ortofotomapy w panelu narzędzi.
 3. W oknie wtyczki pojawi się suwak umożliwiający wybór daty.
 4. Przesuwając suwak, wybierz interesujący cię okres, a wtyczka automatycznie wyświetli odpowiednią ortofotomapę.
+
+## Przykład użycia
+
+![Przykład użycia](przyklad_uzycia.gif)
 
 # EN
 
