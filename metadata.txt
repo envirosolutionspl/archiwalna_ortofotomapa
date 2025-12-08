@@ -9,6 +9,7 @@ description=Pozwala na wczytanie do QGIS archiwalnej ortofotomapy z geoportal.go
 version=1.0.9
 author=EnviroSolutions Sp. z o.o.
 email=office@envirosolutions.pl
+supportsQt6=True
 
 about=Pozwala na podczytanie w QGIS archiwalnej ortofotomapy na podstawie usług z geoportal.gov.pl.
 

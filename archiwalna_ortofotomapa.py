@@ -26,7 +26,7 @@
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QToolBar, QApplication, QWidget, QLabel, QDialog, QComboBox
-from PyQt5 import uic
+from qgis.PyQt import uic
 from datetime import datetime
 from qgis.core import QgsSettings
 from .qgis_feed import QgisFeedDialog
@@ -267,7 +267,12 @@ class ArchiwalnaOrtofotomapa:
 
             # show the dockwidget
             # TODO: fix to allow choice of dock location
-            self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockwidget)
+            try:
+                dock_location = Qt.LeftDockWidgetArea
+            except AttributeError:
+                dock_location = Qt.DockWidgetArea.LeftDockWidgetArea
+            
+            self.iface.addDockWidget(dock_location, self.dockwidget)
             self.dockwidget.show()
 
             self.orto = QgsRasterLayer(self.makeDataSourceUri(self.dockwidget.timeSlider.value()),
@@ -282,7 +287,7 @@ class ArchiwalnaOrtofotomapa:
     def showBranchSelectionDialog(self):
         self.qgisfeed_dialog = QgisFeedDialog()
 
-        if self.qgisfeed_dialog.exec_() == QDialog.Accepted:
+        if self.qgisfeed_dialog.exec() == QDialog.Accepted:
             self.selected_branch = self.qgisfeed_dialog.comboBox.currentText()
             
             #Zapis w QGIS3.ini
