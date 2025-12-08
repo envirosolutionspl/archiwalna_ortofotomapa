@@ -23,7 +23,7 @@
  This script initializes the plugin, making it known to QGIS.
 """
 
-from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt
+from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt, QT_VERSION
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QToolBar, QApplication, QWidget, QLabel, QDialog, QComboBox
 from qgis.PyQt import uic
@@ -267,10 +267,10 @@ class ArchiwalnaOrtofotomapa:
 
             # show the dockwidget
             # TODO: fix to allow choice of dock location
-            try:
-                dock_location = Qt.LeftDockWidgetArea
-            except AttributeError:
+            if QT_VERSION >= 0x060000:
                 dock_location = Qt.DockWidgetArea.LeftDockWidgetArea
+            else:
+                dock_location = Qt.LeftDockWidgetArea
             
             self.iface.addDockWidget(dock_location, self.dockwidget)
             self.dockwidget.show()
