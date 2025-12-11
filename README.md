@@ -28,7 +28,7 @@ Archiwalna Ortofotomapa to bezpłatna wtyczka stworzona dla programu QGIS , któ
 
 ## Przykład użycia
 
-![Image](https://github.com/user-attachments/assets/8411a68f-6b78-4f03-b5de-6ee859ccc467)
+![przykladz_uzycia](przyklad_uzycia.gif)
 
 # EN
 
