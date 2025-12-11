@@ -28,7 +28,8 @@ Archiwalna Ortofotomapa to bezpłatna wtyczka stworzona dla programu QGIS , któ
 
 ## Przykład użycia
 
-![Przykład użycia](https://downloads.envirosolutions.pl/z_zapisem_pv_las_final.gif)
+<img src="https://downloads.envirosolutions.pl/z_zapisem_pv_las_final.gif" alt="Pokaz działania" width="799" />
+
 
 # EN
 
