@@ -1,6 +1,21 @@
 import unittest
 import sys
 import os
+import importlib 
+from unittest.mock import MagicMock, patch
+from .constans import YEARS 
+
+# Dynamiczne ustalanie ścieżek i nazwy pakietu
+current_dir = os.path.dirname(os.path.abspath(__file__))
+plugin_dir = os.path.dirname(current_dir)
+plugins_dir = os.path.dirname(plugin_dir)
+sys.path.append(plugins_dir)
+
+   
+
+# Pobieramy nazwę folderu wtyczki
+plugin_package_name = os.path.basename(plugin_dir)
+
 from qgis.PyQt.QtCore import QObject, QEventLoop, QTimer
 from qgis.PyQt.QtNetwork import QNetworkRequest
 from qgis.core import (
@@ -8,6 +23,10 @@ from qgis.core import (
     QgsRasterLayer,
     QgsNetworkAccessManager
 )
+
+module_name = f"{plugin_package_name}.archiwalna_ortofotomapa"
+plugin_module = importlib.import_module(module_name)
+ArchiwalnaOrtofotomapa = plugin_module.ArchiwalnaOrtofotomapa
 
 class NetworkLogger(QObject):
     def __init__(self):
@@ -31,13 +50,10 @@ class TestGeoportalFutureProof(unittest.TestCase):
     nam = None
     logger = None
     test_results = []
+    plugin = None
 
     @classmethod
     def setUpClass(cls):
-        """
-        Uruchamia się RAZ przed startem testów w tym pliku.
-        Inicjuje QGIS i przygotowuje środowisko.
-        """
         if QgsApplication.instance() is None:
             cls.qgs = QgsApplication([], False)
             cls.qgs.initQgis()
@@ -50,12 +66,36 @@ class TestGeoportalFutureProof(unittest.TestCase):
         
         cls.test_results = []
 
+        # Dynamiczne mockowanie qgis_feed
+        feed_mock = MagicMock()
+        sys.modules[f'{plugin_package_name}.qgis_feed'] = feed_mock
+        
+        feed_mock.QgisFeed.return_value.initFeed = MagicMock()
+        feed_mock.QgisFeedDialog.return_value.exec_.return_value = 0 
+
+        # Mockowanie QgsSettings i QSettings
+        plugin_module_name = ArchiwalnaOrtofotomapa.__module__
+        
+        cls.settings_patcher = patch(f'{plugin_module_name}.QgsSettings')
+        MockQgsSettings = cls.settings_patcher.start()
+        MockQgsSettings.return_value.value.return_value = "geodezja" 
+
+        cls.qsettings_patcher = patch(f'{plugin_module_name}.QSettings')
+        MockQSettings = cls.qsettings_patcher.start()
+        MockQSettings.return_value.value.return_value = "pl_PL"
+
+        cls.iface_mock = MagicMock()
+        cls.iface_mock.mainWindow.return_value.findChild.return_value = None
+        
+        cls.plugin = ArchiwalnaOrtofotomapa(cls.iface_mock)
+
     @classmethod
     def tearDownClass(cls):
-        """
-        Uruchamia się RAZ po zakończeniu wszystkich testów w tym pliku.
-        Generuje raport i sprząta.
-        """
+        if hasattr(cls, 'settings_patcher'):
+            cls.settings_patcher.stop()
+        if hasattr(cls, 'qsettings_patcher'):
+            cls.qsettings_patcher.stop()
+
         print("\n" + "="*60)
         print(f"RAPORT PODSUMOWUJĄCY ({len(cls.test_results)} przypadków)")
         print("="*60)
@@ -77,51 +117,20 @@ class TestGeoportalFutureProof(unittest.TestCase):
             cls.qgs.exitQgis()
 
     def testYearsAvailability(self):
-        """
-        Główny test sprawdzający dostępność lat.
-        """
-        file_path = os.path.join(os.path.dirname(__file__), 'data', 'years.txt')
-        
-        if not os.path.exists(file_path):
-            self.fail(f"Brak pliku konfiguracyjnego: {file_path}")
 
-        with open(file_path) as f:
-            years = [line.strip() for line in f.read().split(",") if line.strip()]
-
-        base_url = (
-            "IgnoreGetFeatureInfoUrl=1&IgnoreGetMapUrl=1&crs=EPSG:2180&format=image/jpeg"
-            "&layers=Raster&styles=&url=https://mapy.geoportal.gov.pl/wss/service/"
-            "PZGIK/ORTO/WMS/StandardResolutionTime?TIME="
-        )
-
-        for year in years:
+        for year in YEARS:
             with self.subTest(year=year):
                 self.logger.reset()
                 
-                time_param = f"{year}-01-01T00%3A00%3A00.000%2B01%3A00"
-                uri = base_url + time_param
+                uri = self.plugin.makeDataSourceUri(year)
 
                 layer = QgsRasterLayer(uri, f"orto_{year}", "wms")
-
-                loop = QEventLoop()
-                conn = self.nam.finished.connect(loop.quit)
                 
-                timer = QTimer()
-                timer.setSingleShot(True)
-                timer.timeout.connect(loop.quit)
-                timer.start(5000) # 5 sekund timeout
-                
-                if not self.logger.reply_received:
-                    loop.exec_()
-                
-                self.nam.finished.disconnect(conn)
-                timer.stop()
-
                 status = self.logger.last_status
                 result_entry = {'year': year, 'status': 'FAIL', 'reason': ''}
 
                 if status is None:
-                    result_entry['reason'] = "Timeout (5s)"
+                    result_entry['reason'] = "Timeout"
                 elif status != 200:
                     result_entry['reason'] = f"Kod HTTP {status}"
                 elif not layer.isValid():
@@ -131,7 +140,7 @@ class TestGeoportalFutureProof(unittest.TestCase):
                     result_entry['reason'] = "OK"
 
                 self.test_results.append(result_entry)
-
+                
                 self.assertEqual(
                     result_entry['status'], 
                     'OK', 
