@@ -37,7 +37,7 @@ from qgis.core import QgsRasterLayer, QgsProject, Qgis
 from .archiwalna_ortofotomapa_dockwidget import ArchiwalnaOrtofotomapaDockWidget
 import os.path
 from . import PLUGIN_VERSION as plugin_version
-from .constants import QT_VERSION_STR_6
+from .utils import get_qt_version
 
 
 """Plugin version"""
@@ -268,7 +268,7 @@ class ArchiwalnaOrtofotomapa:
 
             # show the dockwidget
             # TODO: fix to allow choice of dock location
-            if QT_VERSION_STR.startswith(QT_VERSION_STR_6):
+            if QT_VERSION_STR.startswith(getQtVersion(6)):
                 dock_location = Qt.DockWidgetArea.LeftDockWidgetArea
             else:
                 dock_location = Qt.LeftDockWidgetArea

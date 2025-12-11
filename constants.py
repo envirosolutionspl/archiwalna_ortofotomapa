@@ -20,4 +20,6 @@ INDUSTRIES = {
 
 OLDEST_ORTO_YEAR = 1957
 
-QT_VERSION_STR_6 = "6."
+QT_VER = {
+    6: "6."
+}
