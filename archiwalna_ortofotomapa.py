@@ -38,11 +38,8 @@ from .archiwalna_ortofotomapa_dockwidget import ArchiwalnaOrtofotomapaDockWidget
 import os.path
 from . import PLUGIN_VERSION as plugin_version
 from .utils import isCompatibleQtVersion
+from . import PLUGIN_NAME as plugin_name
 
-
-"""Plugin version"""
-plugin_version = '1.0.9'
-plugin_name = 'Archiwalna Ortofotomapa'
 
 class ArchiwalnaOrtofotomapa:
     """QGIS Plugin Implementation."""
