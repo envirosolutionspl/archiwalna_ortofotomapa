@@ -1,6 +1,5 @@
-from .constants import QT_VER   
+from .constants import QT_VER 
 
-def getQtVersion(version):
-    if version in QT_VER:
-        return QT_VER[version]
-    return None
+
+def isCompatibleQtVersion(cur_version, tar_version):
+    return cur_version.startswith(QT_VER[tar_version])
