@@ -2,31 +2,25 @@ import unittest
 import sys
 import os
 import importlib 
-from unittest.mock import MagicMock, patch
-from .constans import YEARS 
+from unittest.mock import MagicMock
+from .constants import YEARS 
 
 # Dynamiczne ustalanie ścieżek i nazwy pakietu
 current_dir = os.path.dirname(os.path.abspath(__file__))
 plugin_dir = os.path.dirname(current_dir)
 plugins_dir = os.path.dirname(plugin_dir)
-sys.path.append(plugins_dir)
-
-   
+sys.path.insert(0, plugins_dir)
 
 # Pobieramy nazwę folderu wtyczki
 plugin_package_name = os.path.basename(plugin_dir)
 
-from qgis.PyQt.QtCore import QObject, QEventLoop, QTimer
+from qgis.PyQt.QtCore import QObject
 from qgis.PyQt.QtNetwork import QNetworkRequest
 from qgis.core import (
     QgsApplication,
     QgsRasterLayer,
     QgsNetworkAccessManager
 )
-
-module_name = f"{plugin_package_name}.archiwalna_ortofotomapa"
-plugin_module = importlib.import_module(module_name)
-ArchiwalnaOrtofotomapa = plugin_module.ArchiwalnaOrtofotomapa
 
 class NetworkLogger(QObject):
     def __init__(self):
@@ -66,36 +60,17 @@ class TestGeoportalFutureProof(unittest.TestCase):
         
         cls.test_results = []
 
-        # Dynamiczne mockowanie qgis_feed
-        feed_mock = MagicMock()
-        sys.modules[f'{plugin_package_name}.qgis_feed'] = feed_mock
-        
-        feed_mock.QgisFeed.return_value.initFeed = MagicMock()
-        feed_mock.QgisFeedDialog.return_value.exec_.return_value = 0 
+        # Importujemy moduł wtyczki
+        module_name = f"{plugin_package_name}.archiwalna_ortofotomapa"
+        plugin_module = importlib.import_module(module_name)
+        cls.ArchiwalnaOrtofotomapa = plugin_module.ArchiwalnaOrtofotomapa 
 
-        # Mockowanie QgsSettings i QSettings
-        plugin_module_name = ArchiwalnaOrtofotomapa.__module__
-        
-        cls.settings_patcher = patch(f'{plugin_module_name}.QgsSettings')
-        MockQgsSettings = cls.settings_patcher.start()
-        MockQgsSettings.return_value.value.return_value = "geodezja" 
-
-        cls.qsettings_patcher = patch(f'{plugin_module_name}.QSettings')
-        MockQSettings = cls.qsettings_patcher.start()
-        MockQSettings.return_value.value.return_value = "pl_PL"
-
+        # Inicjalizacja wtyczki w trybie testowym (bez UI i ciężkich zależności)
         cls.iface_mock = MagicMock()
-        cls.iface_mock.mainWindow.return_value.findChild.return_value = None
-        
-        cls.plugin = ArchiwalnaOrtofotomapa(cls.iface_mock)
+        cls.plugin = cls.ArchiwalnaOrtofotomapa(cls.iface_mock, is_tested=True)
 
     @classmethod
     def tearDownClass(cls):
-        if hasattr(cls, 'settings_patcher'):
-            cls.settings_patcher.stop()
-        if hasattr(cls, 'qsettings_patcher'):
-            cls.qsettings_patcher.stop()
-
         print("\n" + "="*60)
         print(f"RAPORT PODSUMOWUJĄCY ({len(cls.test_results)} przypadków)")
         print("="*60)
