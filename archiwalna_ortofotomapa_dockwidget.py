@@ -41,14 +41,14 @@ class ArchiwalnaOrtofotomapaDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor."""
 
-        super(ArchiwalnaOrtofotomapaDockWidget, self).__init__(parent)
+        super().__init__(parent)
         # Set up the user interface from Designer.  
         # After setupUI you can access any designer object by doing
         # self.<objectname>, and you can use autoconnect slots - see
         # http://doc.qt.io/qt-5/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
-        self.img_main.setMargin(3)
+        self.img_main.setContentsMargins(3, 3, 3, 3)
         
         # Store current year
         self.currentYear = datetime.now().year
