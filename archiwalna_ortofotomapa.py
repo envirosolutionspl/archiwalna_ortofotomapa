@@ -44,7 +44,7 @@ from . import PLUGIN_NAME as plugin_name
 class ArchiwalnaOrtofotomapa:
     """QGIS Plugin Implementation."""
 
-    def __init__(self, iface):
+    def __init__(self, iface, is_tested=False):
         """Constructor.
 
         :param iface: An interface instance that will be passed to this class
@@ -53,20 +53,21 @@ class ArchiwalnaOrtofotomapa:
         :type iface: QgsInterface
         """
 
-        self.settings = QgsSettings() 
+        if not is_tested:
+            self.settings = QgsSettings() 
 
-        if Qgis.QGIS_VERSION_INT >= 31000:
-            from .qgis_feed import QgisFeed
-            self.selected_industry = self.settings.value("selected_industry", None)
-            show_dialog = self.settings.value("showDialog", True, type=bool)
+            if Qgis.QGIS_VERSION_INT >= 31000:
+                from .qgis_feed import QgisFeed
+                self.selected_industry = self.settings.value("selected_industry", None)
+                show_dialog = self.settings.value("showDialog", True, type=bool)
 
-            if self.selected_industry is None and show_dialog:
-                self.showBranchSelectionDialog()
+                if self.selected_industry is None and show_dialog:
+                    self.showBranchSelectionDialog()
 
-            select_indust_session = self.settings.value('selected_industry')
+                select_indust_session = self.settings.value('selected_industry')
 
-            self.feed = QgisFeed(selected_industry=select_indust_session, plugin_name=plugin_name)
-            self.feed.initFeed()
+                self.feed = QgisFeed(selected_industry=select_indust_session, plugin_name=plugin_name)
+                self.feed.initFeed()
 
         # Save reference to the QGIS interface
         self.iface = iface
@@ -74,42 +75,43 @@ class ArchiwalnaOrtofotomapa:
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
 
-        # initialize locale
-        locale = QSettings().value('locale/userLocale')[0:2]
-        locale_path = os.path.join(
-            self.plugin_dir,
-            'i18n',
-            'ArchiwalnaOrtofotomapa_{}.qm'.format(locale))
+        if not is_tested:
+            # initialize locale
+            locale = QSettings().value('locale/userLocale')[0:2]
+            locale_path = os.path.join(
+                self.plugin_dir,
+                'i18n',
+                'ArchiwalnaOrtofotomapa_{}.qm'.format(locale))
 
-        if os.path.exists(locale_path):
-            self.translator = QTranslator()
-            self.translator.load(locale_path)
-            QCoreApplication.installTranslator(self.translator)
+            if os.path.exists(locale_path):
+                self.translator = QTranslator()
+                self.translator.load(locale_path)
+                QCoreApplication.installTranslator(self.translator)
 
-        # Declare instance attributes
-        self.actions = []
-        self.menu = self.tr(u'&EnviroSolutions')
-        # TODO: We are going to let the user set this up in a future iteration
-        self.toolbar = self.iface.mainWindow().findChild(QToolBar, 'EnviroSolutions')
-        if not self.toolbar:
-            self.toolbar = self.iface.addToolBar(u'EnviroSolutions')
-            self.toolbar.setObjectName(u'EnviroSolutions')
+            # Declare instance attributes
+            self.actions = []
+            self.menu = self.tr(u'&EnviroSolutions')
+            # TODO: We are going to let the user set this up in a future iteration
+            self.toolbar = self.iface.mainWindow().findChild(QToolBar, 'EnviroSolutions')
+            if not self.toolbar:
+                self.toolbar = self.iface.addToolBar(u'EnviroSolutions')
+                self.toolbar.setObjectName(u'EnviroSolutions')
 
-        #print "** INITIALIZING ArchiwalnaOrtofotomapa"
+            #print "** INITIALIZING ArchiwalnaOrtofotomapa"
 
-        self.pluginIsActive = False
-        
-        # Create the dockwidget and keep reference
-        self.dockwidget = ArchiwalnaOrtofotomapaDockWidget()
-        
-        # Connect to slider signals directly (once during initialization)
-        self.dockwidget.timeSlider.valueChanged.connect(self.sliderChanged)
-        self.dockwidget.timeSlider.sliderReleased.connect(self.sliderReleased)
-        self.dockwidget.timeSlider.sliderPressed.connect(self.sliderPressed)
-        self.dockwidget.timeSlider.sliderMoved.connect(self.sliderMoved)
-        self.dockwidget.closingPlugin.connect(self.onClosePlugin)
+            self.pluginIsActive = False
+            
+            # Create the dockwidget and keep reference
+            self.dockwidget = ArchiwalnaOrtofotomapaDockWidget()
+            
+            # Connect to slider signals directly (once during initialization)
+            self.dockwidget.timeSlider.valueChanged.connect(self.sliderChanged)
+            self.dockwidget.timeSlider.sliderReleased.connect(self.sliderReleased)
+            self.dockwidget.timeSlider.sliderPressed.connect(self.sliderPressed)
+            self.dockwidget.timeSlider.sliderMoved.connect(self.sliderMoved)
+            self.dockwidget.closingPlugin.connect(self.onClosePlugin)
 
-        self.canvas = self.iface.mapCanvas()
+            self.canvas = self.iface.mapCanvas()
         self.orto = None
 
         # --------------------------------------------------------------------------
