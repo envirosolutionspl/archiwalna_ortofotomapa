@@ -37,7 +37,7 @@ from qgis.core import QgsRasterLayer, QgsProject, Qgis
 from .archiwalna_ortofotomapa_dockwidget import ArchiwalnaOrtofotomapaDockWidget
 import os.path
 from . import PLUGIN_VERSION as plugin_version
-from .utils import isCompatibleQtVersion
+from .utils import isCompatibleQtVersion, pushLogInfo
 from . import PLUGIN_NAME as plugin_name
 
 
@@ -96,8 +96,6 @@ class ArchiwalnaOrtofotomapa:
             if not self.toolbar:
                 self.toolbar = self.iface.addToolBar(u'EnviroSolutions')
                 self.toolbar.setObjectName(u'EnviroSolutions')
-
-            #print "** INITIALIZING ArchiwalnaOrtofotomapa"
 
             self.pluginIsActive = False
             
@@ -209,14 +207,15 @@ class ArchiwalnaOrtofotomapa:
 
 
     def initGui(self):
-        """Create the menu entries and toolbar icons inside the QGIS GUI."""
-
+        """Create the menu entries and toolbar icons inside the QGIS GUI."""    
+        
         icon_path = ':/plugins/archiwalna_ortofotomapa/icons/archiwalna_logo.svg'
         self.addAction(
             icon_path,
             text=self.tr(u'Archiwalna Ortofotomapa'),
             callback=self.run,
             parent=self.iface.mainWindow())
+        pushLogInfo("Wtyczka aktywna")
 
 
     def onClosePlugin(self):
@@ -230,6 +229,7 @@ class ArchiwalnaOrtofotomapa:
         # Commented next statement since it causes QGIS crashe
         # when closing the docked window:
         # self.dockwidget = None
+        pushLogInfo("Wtyczka nieaktywna")
 
         self.pluginIsActive = False
 
@@ -274,12 +274,14 @@ class ArchiwalnaOrtofotomapa:
             
             self.iface.addDockWidget(dock_location, self.dockwidget)
             self.dockwidget.show()
+            pushLogInfo("Dockwidget ustawiony")
 
             self.orto = QgsRasterLayer(self.makeDataSourceUri(self.dockwidget.timeSlider.value()),
                                        "Ortofotomapa Archiwalna %d" % self.dockwidget.timeSlider.value(),
                                        'wms')
             self.orto.willBeDeleted.connect(self.ortoRemoval)
             QgsProject.instance().addMapLayer(self.orto)
+            pushLogInfo("Ortofotomapa dodana")
         else:
             #reopened
             pass
@@ -296,7 +298,8 @@ class ArchiwalnaOrtofotomapa:
 
     def ortoRemoval(self):
         """Function to remove the dockwidget and the orto layer when the layer is deleted"""
-
+        
+        pushLogInfo("Ortofotomapa usunięta")
         self.dockwidget.close()
         self.orto = None
 
@@ -326,6 +329,7 @@ class ArchiwalnaOrtofotomapa:
     def sliderReleased(self):
         """Function to control the parameter responsible for actions after releasing the slider"""
         self.dockwidget.isSliderPressed = False
+        pushLogInfo("Slider puszczony")
         self.changeOrtoLayer()
 
 
@@ -338,6 +342,7 @@ class ArchiwalnaOrtofotomapa:
         self.orto.triggerRepaint()
         # self.orto.dataProvider().reloadData() #QGIS 3.12 and above
         self.orto.setName("Ortofotomapa Archiwalna %d" % year)
+        pushLogInfo("Nazwa i źródło ortofotomapy zmienione")
 
 
     def makeDataSourceUri(self, year):
