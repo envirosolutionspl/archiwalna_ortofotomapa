@@ -23,7 +23,7 @@
  This script initializes the plugin, making it known to QGIS.
 """
 
-from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt, QT_VERSION_STR
+from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt, QT_VERSION_STR, QTimer
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QToolBar, QApplication, QWidget, QLabel, QDialog, QComboBox
 from qgis.PyQt import uic
@@ -32,13 +32,15 @@ from qgis.core import QgsSettings
 from .qgis_feed import QgisFeedDialog
 # Initialize Qt resources from file resources.py
 from .resources import *
-from qgis.core import QgsRasterLayer, QgsProject, Qgis
+from qgis.core import QgsRasterLayer, QgsProject, Qgis, QgsNetworkAccessManager, QgsPointXY, QgsCoordinateReferenceSystem, QgsCoordinateTransform
 # Import the code for the DockWidget
 from .archiwalna_ortofotomapa_dockwidget import ArchiwalnaOrtofotomapaDockWidget
 import os.path
 from . import PLUGIN_VERSION as plugin_version
 from .utils import isCompatibleQtVersion, pushLogInfo
 from . import PLUGIN_NAME as plugin_name
+from .constants import ORTO_SERVICE_URL, WMS_BASE_PARAMS, WMS_TIME_SUFFIX, WARSAW_COORDINATES, INITIAL_SCALE, POINT_EPSG
+
 
 
 class ArchiwalnaOrtofotomapa:
@@ -71,6 +73,9 @@ class ArchiwalnaOrtofotomapa:
 
         # Save reference to the QGIS interface
         self.iface = iface
+
+        self.project = QgsProject.instance()
+        self.nam = QgsNetworkAccessManager.instance()
 
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
@@ -251,17 +256,22 @@ class ArchiwalnaOrtofotomapa:
 
     def run(self):
         """Run method that loads and starts the plugin"""
+        
+        # Increase network timeout to 2 minutes (120000 ms)
+        self.nam.setTimeout(120000)
 
         if not self.pluginIsActive:
             self.pluginIsActive = True
             #print "** STARTING ArchiwalnaOrtofotomapa"
             if self.orto:
                 self.orto.willBeDeleted.disconnect()
+                self.project.removeMapLayer(self.orto)
+                self.orto = None
             
             # Set slider to max year every time plugin is launched
             self.dockwidget.setSliderToMaxYear()
 
-            # informacje o wersji
+            # Version info
             self.dockwidget.setWindowTitle('%s %s' % (plugin_name, plugin_version))
             self.dockwidget.lbl_pluginVersion.setText('%s %s' % (plugin_name, plugin_version))
 
@@ -280,11 +290,30 @@ class ArchiwalnaOrtofotomapa:
                                        "Ortofotomapa Archiwalna %d" % self.dockwidget.timeSlider.value(),
                                        'wms')
             self.orto.willBeDeleted.connect(self.ortoRemoval)
-            QgsProject.instance().addMapLayer(self.orto)
+            self.project.addMapLayer(self.orto)
             pushLogInfo("Ortofotomapa dodana")
+
+            self.project.addMapLayer(self.orto)
+            pushLogInfo("Ortofotomapa dodana")
+
+            # Zoom to Warsaw after a short delay to ensure layer is fully loaded
+            QTimer.singleShot(500, self.zoomToWarsaw)
+
         else:
             #reopened
             pass
+
+    def zoomToWarsaw(self):
+        """Zooms the map canvas to Warsaw coordinates."""
+        point = QgsPointXY(*WARSAW_COORDINATES)
+        crs_src = QgsCoordinateReferenceSystem(POINT_EPSG)
+        crs_dest = self.canvas.mapSettings().destinationCrs()
+        transform = QgsCoordinateTransform(crs_src, crs_dest, self.project)
+        point_transformed = transform.transform(point)
+        
+        self.canvas.setCenter(point_transformed)
+        self.canvas.zoomScale(INITIAL_SCALE)
+        self.canvas.refresh()
 
     def showBranchSelectionDialog(self):
         self.qgisfeed_dialog = QgisFeedDialog()
@@ -292,7 +321,6 @@ class ArchiwalnaOrtofotomapa:
         if self.qgisfeed_dialog.exec() == QDialog.Accepted:
             self.selected_branch = self.qgisfeed_dialog.comboBox.currentText()
             
-            #Zapis w QGIS3.ini
             self.settings.setValue("selected_industry", self.selected_branch)  
             self.settings.setValue("showDialog", False) 
 
@@ -348,9 +376,4 @@ class ArchiwalnaOrtofotomapa:
     def makeDataSourceUri(self, year):
         """Function to edit the orto layer and change the year it is based on"""
         
-        serviceUrl = "https://mapy.geoportal.gov.pl/wss/service/PZGIK/ORTO/WMS/StandardResolutionTime"
-        return "IgnoreGetFeatureInfoUrl=1&IgnoreGetMapUrl=1&contextualWMSLegend=0&crs=EPSG:2180&format=image/jpeg&layers=Raster&styles=&url=" \
-               + serviceUrl + \
-               "?TIME=" + \
-               str(year) + \
-               "-01-01T00%3A00%3A00.000%2B01%3A00"
+        return WMS_BASE_PARAMS + ORTO_SERVICE_URL + "?TIME=" + str(year) + WMS_TIME_SUFFIX

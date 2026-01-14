@@ -4,8 +4,9 @@
 
 ## Opis
 
-Archiwalna Ortofotomapa to bezpłatna wtyczka stworzona dla programu QGIS , która umożliwia użytkownikom przeglądanie ortofotomap kraju z różnych okresów.
+Archiwalna Ortofotomapa to bezpłatna wtyczka stworzona dla programu QGIS , która umożliwia użytkownikom przeglądanie ortofotomap Polski z różnych okresów.
 <br>W prosty sposób można za pomocą suwaka wyświetlić ortofotomapę z konkretnego momentu z przeszłości.
+<br> Dodana ortofotomapa jest automatycznie ustawiania na bieżący rok i przybliżana do Warszawy.
 
 
 ## Wymagania
@@ -36,9 +37,9 @@ Archiwalna Ortofotomapa to bezpłatna wtyczka stworzona dla programu QGIS , któ
 
 ## Description
 
-The Historical Orthophotomap is a free plugin created for QGIS, allowing users to browse orthophotomaps of the country from various time periods. 
+The Historical Orthophotomap is a free plugin created for QGIS, allowing users to browse orthophotomaps of Poland from various time periods. 
 <br>With a simple slider, you can display an orthophotomap from a specific moment in the past.
-
+<br> The added orthophotomap is automatically set to the current year and zoomed to Warsaw.
 ## Requirements
 
 - QGIS software version 3.28 or higher.

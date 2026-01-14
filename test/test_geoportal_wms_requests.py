@@ -34,7 +34,14 @@ class NetworkLogger(QObject):
         self.reply_received = False 
 
     def on_finished(self, reply):
-        self.last_status = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
+        try:
+            # Qt5
+            attr = QNetworkRequest.HttpStatusCodeAttribute
+        except AttributeError:
+            # Qt6
+            attr = QNetworkRequest.Attribute.HttpStatusCodeAttribute
+            
+        self.last_status = reply.attribute(attr)
         self.last_error = reply.error()
         self.reply_received = True
 
@@ -90,6 +97,7 @@ class TestGeoportalFutureProof(unittest.TestCase):
 
         if cls.qgs:
             cls.qgs.exitQgis()
+            cls.qgs = None
 
     def testYearsAvailability(self):
 
@@ -121,6 +129,9 @@ class TestGeoportalFutureProof(unittest.TestCase):
                     'OK', 
                     f"Rok {year}: {result_entry['reason']}"
                 )
+                
+                # Cleanup layer to avoid QWaitCondition errors
+                del layer
 
 if __name__ == "__main__":
     unittest.main()
