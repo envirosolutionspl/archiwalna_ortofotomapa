@@ -14,13 +14,17 @@ sys.path.insert(0, plugins_dir)
 # Pobieramy nazwę folderu wtyczki
 plugin_package_name = os.path.basename(plugin_dir)
 
-from qgis.PyQt.QtCore import QObject
+from qgis.PyQt.QtCore import QObject, QT_VERSION_STR
 from qgis.PyQt.QtNetwork import QNetworkRequest
 from qgis.core import (
     QgsApplication,
     QgsRasterLayer,
     QgsNetworkAccessManager
 )
+
+# Import utils dynamically using the established package name
+utils_module = importlib.import_module(f"{plugin_package_name}.utils")
+Utils = utils_module.Utils
 
 class NetworkLogger(QObject):
     def __init__(self):
@@ -34,12 +38,13 @@ class NetworkLogger(QObject):
         self.reply_received = False 
 
     def on_finished(self, reply):
-        try:
+        # Use the utilities function to check for Qt version just like in the main plugin code
+        if Utils.isCompatibleQtVersion(QT_VERSION_STR, 6):
+             # Qt6
+            attr = QNetworkRequest.Attribute.HttpStatusCodeAttribute
+        else:
             # Qt5
             attr = QNetworkRequest.HttpStatusCodeAttribute
-        except AttributeError:
-            # Qt6
-            attr = QNetworkRequest.Attribute.HttpStatusCodeAttribute
             
         self.last_status = reply.attribute(attr)
         self.last_error = reply.error()

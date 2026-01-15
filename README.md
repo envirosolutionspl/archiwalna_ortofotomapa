@@ -26,6 +26,9 @@ Archiwalna Ortofotomapa to bezpłatna wtyczka stworzona dla programu QGIS , któ
 2. Kliknij na ikonę Archiwalnej Ortofotomapy w panelu narzędzi.
 3. W oknie wtyczki pojawi się suwak umożliwiający wybór daty.
 4. Przesuwając suwak, wybierz interesujący cię okres, a wtyczka automatycznie wyświetli odpowiednią ortofotomapę.
+5. Jeżeli zniknął niebieski pasek w dole ekranu QGISa (pasek postępu), a dalej jest widoczny biały ekran, to są dwie możliwości:
+    a. Nie istnieje ortofotomapa dla wybranego roku, dla danego obszaru.
+    b. Wystąpił błąd z połączeniem z serwerem geoportal.gov.pl. W tym wypadku należy przybliżyć/oddalić zakres, aby mapa załadowała się ponownie. Wynika to z faktu, że połączenie WMS z geoportalem czasami może powodować błędy.
 
 ## Przykład użycia
 
