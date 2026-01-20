@@ -4,8 +4,9 @@
 
 ## Opis
 
-Archiwalna Ortofotomapa to bezpłatna wtyczka stworzona dla programu QGIS , która umożliwia użytkownikom przeglądanie ortofotomap kraju z różnych okresów.
+Archiwalna Ortofotomapa to bezpłatna wtyczka stworzona dla programu QGIS , która umożliwia użytkownikom przeglądanie ortofotomap Polski z różnych okresów.
 <br>W prosty sposób można za pomocą suwaka wyświetlić ortofotomapę z konkretnego momentu z przeszłości.
+<br> Dodana ortofotomapa jest automatycznie ustawiania na bieżący rok i przybliżana do Warszawy.
 
 
 ## Wymagania
@@ -25,10 +26,13 @@ Archiwalna Ortofotomapa to bezpłatna wtyczka stworzona dla programu QGIS , któ
 2. Kliknij na ikonę Archiwalnej Ortofotomapy w panelu narzędzi.
 3. W oknie wtyczki pojawi się suwak umożliwiający wybór daty.
 4. Przesuwając suwak, wybierz interesujący cię okres, a wtyczka automatycznie wyświetli odpowiednią ortofotomapę.
+5. Jeżeli zniknął niebieski pasek w dole ekranu QGISa (pasek postępu), a dalej jest widoczny biały ekran, to są dwie możliwości:
+    a. Nie istnieje ortofotomapa dla wybranego roku, dla danego obszaru.
+    b. Wystąpił błąd z połączeniem z serwerem geoportal.gov.pl. W tym wypadku należy przybliżyć/oddalić zakres, aby mapa załadowała się ponownie. Wynika to z faktu, że połączenie WMS z geoportalem czasami może powodować błędy.
 
 ## Przykład użycia
 
-![przykladz_uzycia](przyklad_uzycia.gif)
+![przykladz_uzycia](docs\przyklad_uzycia.gif)
 
 # EN
 
@@ -36,9 +40,9 @@ Archiwalna Ortofotomapa to bezpłatna wtyczka stworzona dla programu QGIS , któ
 
 ## Description
 
-The Historical Orthophotomap is a free plugin created for QGIS, allowing users to browse orthophotomaps of the country from various time periods. 
+The Historical Orthophotomap is a free plugin created for QGIS, allowing users to browse orthophotomaps of Poland from various time periods. 
 <br>With a simple slider, you can display an orthophotomap from a specific moment in the past.
-
+<br> The added orthophotomap is automatically set to the current year and zoomed to Warsaw.
 ## Requirements
 
 - QGIS software version 3.28 or higher.

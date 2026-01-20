@@ -5,22 +5,26 @@ import importlib
 from unittest.mock import MagicMock
 from .constants import YEARS 
 
-# Dynamiczne ustalanie ścieżek i nazwy pakietu
+# Dynamic path and package name setup
 current_dir = os.path.dirname(os.path.abspath(__file__))
 plugin_dir = os.path.dirname(current_dir)
 plugins_dir = os.path.dirname(plugin_dir)
 sys.path.insert(0, plugins_dir)
 
-# Pobieramy nazwę folderu wtyczki
+# Get plugin folder name
 plugin_package_name = os.path.basename(plugin_dir)
 
-from qgis.PyQt.QtCore import QObject
+from qgis.PyQt.QtCore import QObject, QT_VERSION_STR
 from qgis.PyQt.QtNetwork import QNetworkRequest
 from qgis.core import (
     QgsApplication,
     QgsRasterLayer,
     QgsNetworkAccessManager
 )
+
+# Import utils dynamically using the established package name
+utils_module = importlib.import_module(f"{plugin_package_name}.utils")
+Utils = utils_module.QtUtils
 
 class NetworkLogger(QObject):
     def __init__(self):
@@ -34,7 +38,15 @@ class NetworkLogger(QObject):
         self.reply_received = False 
 
     def on_finished(self, reply):
-        self.last_status = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
+        # Use the utilities function to check for Qt version just like in the main plugin code
+        if Utils.isCompatibleQtVersion(QT_VERSION_STR, 6):
+             # Qt6
+            attr = QNetworkRequest.Attribute.HttpStatusCodeAttribute
+        else:
+            # Qt5
+            attr = QNetworkRequest.HttpStatusCodeAttribute
+            
+        self.last_status = reply.attribute(attr)
         self.last_error = reply.error()
         self.reply_received = True
 
@@ -60,12 +72,12 @@ class TestGeoportalFutureProof(unittest.TestCase):
         
         cls.test_results = []
 
-        # Importujemy moduł wtyczki
+        # Import plugin module
         module_name = f"{plugin_package_name}.archiwalna_ortofotomapa"
         plugin_module = importlib.import_module(module_name)
         cls.ArchiwalnaOrtofotomapa = plugin_module.ArchiwalnaOrtofotomapa 
 
-        # Inicjalizacja wtyczki w trybie testowym (bez UI i ciężkich zależności)
+        # Initialize plugin in test mode (without UI and heavy dependencies)
         cls.iface_mock = MagicMock()
         cls.plugin = cls.ArchiwalnaOrtofotomapa(cls.iface_mock, is_tested=True)
 
@@ -90,6 +102,7 @@ class TestGeoportalFutureProof(unittest.TestCase):
 
         if cls.qgs:
             cls.qgs.exitQgis()
+            cls.qgs = None
 
     def testYearsAvailability(self):
 
@@ -121,6 +134,9 @@ class TestGeoportalFutureProof(unittest.TestCase):
                     'OK', 
                     f"Rok {year}: {result_entry['reason']}"
                 )
+                
+                # Cleanup layer to avoid QWaitCondition errors
+                del layer
 
 if __name__ == "__main__":
     unittest.main()
