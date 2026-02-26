@@ -60,3 +60,7 @@ The Historical Orthophotomap is a free plugin created for QGIS, allowing users t
 2. Click on the icon of the Historical Orthophotomap in the toolbar.
 3. In the plugin window, a slider will appear, allowing you to choose a date.
 4. By moving the slider, select the period of interest, and the plugin will automatically display the corresponding orthophotomap.
+
+## Example usage
+
+![przykladz_uzycia](docs/przyklad_uzycia.gif)
