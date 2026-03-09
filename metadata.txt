@@ -5,8 +5,9 @@
 [general]
 name=Archiwalna Ortofotomapa
 qgisMinimumVersion=3.28
+qgisMaximumVersion=4.99
 description=Pozwala na wczytanie do QGIS archiwalnej ortofotomapy z geoportal.gov.pl. EN: Allows user to add archival orthophotomaps of Poland
-version=1.1.0
+version=1.1.1
 author=EnviroSolutions Sp. z o.o.
 email=office@envirosolutions.pl
 supportsQt6=True
@@ -21,18 +22,21 @@ repository=https://github.com/envirosolutionspl/archiwalna_ortofotomapa
 
 hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
-changelog=Wersja 1.1.0
-    * Dodano testy automatyczne, sprawdzające poprawność wysyłanych requestów do geoportalu.
-    * Dodano logi informujące o procesie działania wtyczki.
-    * Poprawiono zczytwanie wersji i nazwy z metadanych.
-    * Przystosowano wtyczkę do wspierania QGIS 4 (Qt6).
-    * Zaktualizowano zakres i początkowo położenie suwaka.
-    * Dodano automatyczne zoomowanie na Warszawę.
-    * Dodano GIFa obrazującego działanie wtyczki.
-    * Poprawiono podpinanie przycisków.
-    * Podniesiono minimalną wersje QGIS na 3.28.
-    * Zwiększono czas oczekiwania na odpowiedź z serwera.
-    * Wprowadzono zasadę - zawsze może być tylko jedna ortofotomapa powiązana z wtyczką.
+changelog=Wersja 1.1.1
+   * Dodanie informacji o qgisMaximumVersion
+
+# Wersja 1.1.0
+# * Dodano testy automatyczne, sprawdzające poprawność wysyłanych requestów do geoportalu.
+# * Dodano logi informujące o procesie działania wtyczki.
+# * Poprawiono zczytwanie wersji i nazwy z metadanych.
+# * Przystosowano wtyczkę do wspierania QGIS 4 (Qt6).
+# * Zaktualizowano zakres i początkowo położenie suwaka.
+# * Dodano automatyczne zoomowanie na Warszawę.
+# * Dodano GIFa obrazującego działanie wtyczki.
+# * Poprawiono podpinanie przycisków.
+# * Podniesiono minimalną wersje QGIS na 3.28.
+# * Zwiększono czas oczekiwania na odpowiedź z serwera.
+# * Wprowadzono zasadę - zawsze może być tylko jedna ortofotomapa powiązana z wtyczką.
 
 # Wersja 1.0.9
 # * Aktualizacja stopki wtyczki
