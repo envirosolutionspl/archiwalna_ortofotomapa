@@ -22,9 +22,11 @@ repository=https://github.com/envirosolutionspl/archiwalna_ortofotomapa
 
 hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
-changelog=Wersja 1.1.1
-   * Dodanie informacji o qgisMaximumVersion
+changelog=Wersja 1.1.2
+   * zamiana przekierowania homepage, zmiana adresu email na aktualny
 
+# Wersja 1.1.1
+# * Dodanie informacji o qgisMaximumVersion
 # Wersja 1.1.0
 # * Dodano testy automatyczne, sprawdzające poprawność wysyłanych requestów do geoportalu.
 # * Dodano logi informujące o procesie działania wtyczki.
