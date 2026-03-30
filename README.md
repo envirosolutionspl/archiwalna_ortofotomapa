@@ -34,6 +34,10 @@ Archiwalna Ortofotomapa to bezpłatna wtyczka stworzona dla programu QGIS , któ
 
 ![przykladz_uzycia](docs/przyklad_uzycia.gif)
 
+## Kontakt
+
+Wtyczka została stworzona przez ****EnviroSolutions**. W razie pytań lub potrzeby wsparcia skontaktuj się z nami przez e-mail:** **[gis@envirosolutions.pl](mailto:gis@envirosolutions.pl)**.
+
 # EN
 
 # QGIS Plugin - Historical Orthophotomap
@@ -64,3 +68,7 @@ The Historical Orthophotomap is a free plugin created for QGIS, allowing users t
 ## Example usage
 
 ![przykladz_uzycia](docs/przyklad_uzycia.gif)
+
+## Contact
+
+The plugin was developed by ****EnviroSolutions**. For questions or support, contact us at:** **[gis@envirosolutions.pl](mailto:gis@envirosolutions.pl)**.

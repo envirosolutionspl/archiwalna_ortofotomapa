@@ -9,7 +9,7 @@ qgisMaximumVersion=4.99
 description=Pozwala na wczytanie do QGIS archiwalnej ortofotomapy z geoportal.gov.pl. EN: Allows user to add archival orthophotomaps of Poland
 version=1.1.1
 author=EnviroSolutions Sp. z o.o.
-email=office@envirosolutions.pl
+email=gis@envirosolutions.pl
 supportsQt6=True
 
 about=Pozwala na podczytanie w QGIS archiwalnej ortofotomapy na podstawie usług z geoportal.gov.pl.
@@ -63,7 +63,7 @@ changelog=Wersja 1.1.1
 # Tags are comma separated with spaces allowed
 tags=python, Poland, Polska, Orthophotomap, ortofotomapa, geoportal, GUGiK, satelita, podkład, basemap, EnviroSolutions, time, archiwalna, old
 
-homepage=https://github.com/envirosolutionspl/archiwalna_ortofotomapa
+homepage=https://envirosolutions.pl/wtyczki-qgis/archiwalna-ortofotomapa/
 category=Plugins
 icon=icons/archiwalna_logo.svg
 # experimental flag
