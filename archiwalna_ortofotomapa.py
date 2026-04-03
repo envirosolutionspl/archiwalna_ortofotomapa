@@ -32,14 +32,14 @@ from qgis.core import QgsSettings
 from .qgis_feed import QgisFeedDialog
 # Initialize Qt resources from file resources.py
 from .resources import *
-from qgis.core import QgsRasterLayer, QgsProject, Qgis, QgsNetworkAccessManager, QgsPointXY, QgsCoordinateReferenceSystem, QgsCoordinateTransform
+from qgis.core import QgsRasterLayer, QgsProject, Qgis, QgsNetworkAccessManager
 # Import the code for the DockWidget
 from .archiwalna_ortofotomapa_dockwidget import ArchiwalnaOrtofotomapaDockWidget
 import os.path
 from . import PLUGIN_VERSION as plugin_version
 from .utils import MessageUtils, QtUtils
 from . import PLUGIN_NAME as plugin_name
-from .constants import ORTO_SERVICE_URL, WMS_BASE_PARAMS, WMS_TIME_SUFFIX, POINT_COORDINATES, INITIAL_SCALE, SRS_CODE
+from .constants import ORTO_SERVICE_URL, WMS_BASE_PARAMS, WMS_TIME_SUFFIX, INITIAL_SCALE
 
 
 
@@ -302,24 +302,16 @@ class ArchiwalnaOrtofotomapa:
             else:
                 MessageUtils.pushLogWarning("Błąd: Warstwa nie została dodana do projektu")
 
-            # Zoom to Warsaw after a short delay to ensure layer is fully loaded
-            QTimer.singleShot(500, self.zoomToPoint)
+            # Match initial zoom scale after a short delay to ensure layer is fully loaded
+            QTimer.singleShot(500, self.applyInitialScale)
 
         else:
             #reopened
             pass
 
-    def zoomToPoint(self):
-        """Zooms the map canvas to Warsaw coordinates."""
-        point = QgsPointXY(*POINT_COORDINATES)
-        crs_src = QgsCoordinateReferenceSystem("EPSG:" + SRS_CODE)
-        crs_dest = self.canvas.mapSettings().destinationCrs()
-        transform = QgsCoordinateTransform(crs_src, crs_dest, self.project)
-        point_transformed = transform.transform(point)
-        
-        self.canvas.setCenter(point_transformed)
+    def applyInitialScale(self):
+        """Sets canvas scale without changing the current map center."""
         self.canvas.zoomScale(INITIAL_SCALE)
-        self.canvas.refresh()
 
     def showBranchSelectionDialog(self):
         self.qgisfeed_dialog = QgisFeedDialog()
