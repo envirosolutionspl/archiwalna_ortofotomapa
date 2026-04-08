@@ -312,6 +312,7 @@ class ArchiwalnaOrtofotomapa:
     def applyInitialScale(self):
         """Sets canvas scale without changing the current map center."""
         self.canvas.zoomScale(INITIAL_SCALE)
+        self.canvas.refresh()
 
     def showBranchSelectionDialog(self):
         self.qgisfeed_dialog = QgisFeedDialog()
