@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>344</width>
-    <height>220</height>
+    <width>899</width>
+    <height>640</height>
    </rect>
   </property>
   <property name="windowIcon">
@@ -104,20 +104,14 @@
         <property name="sizeConstraint">
          <enum>QLayout::SetMinimumSize</enum>
         </property>
-        <property name="horizontalSpacing">
-         <number>6</number>
-        </property>
-        <property name="verticalSpacing">
+        <property name="bottomMargin">
          <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>6</number>
         </property>
         <item row="2" column="1">
          <widget class="QLabel" name="lbl_szkolenia">
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>15</height>
-           </size>
-          </property>
           <property name="font">
            <font>
             <pointsize>8</pointsize>
@@ -171,7 +165,7 @@
          <widget class="QLabel" name="lbl_systemy">
           <property name="maximumSize">
            <size>
-            <width>200</width>
+            <width>120</width>
             <height>15</height>
            </size>
           </property>
