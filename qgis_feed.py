@@ -1,6 +1,6 @@
 from qgis.core import (QgsNewsFeedParser, QgsSettings, QgsNewsFeedModel,
-                       QgsMessageLog, QgsApplication)
-from qgis.PyQt.QtCore import QUrl
+                       QgsApplication)
+from qgis.PyQt.QtCore import QUrl, QDir, QEvent
 from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QDialog, QComboBox, QPushButton
 
@@ -8,7 +8,14 @@ import re
 import os
 import unicodedata
 
-from .constants import INDUSTRIES, FEED_URL
+from .constants import INDUSTRIES, FEED_URL, FOOTER_LOGOS
+from .utils import MessageUtils, ThemeUtils
+
+PLUGIN_DIR = os.path.dirname(__file__)
+
+# Prefiks "archiwalnaimg:" używany w url(...) arkusza stylów w ui/qgis_feed.ui (strzałka listy).
+# Ścieżki wyszukiwania QDir są wspólne dla całego QGIS, więc prefiks musi być unikalny dla wtyczki.
+QDir.addSearchPath('archiwalnaimg', os.path.join(PLUGIN_DIR, 'icons'))
 
 
 class QgisFeed:
@@ -17,7 +24,7 @@ class QgisFeed:
         self.industries_dict = INDUSTRIES
 
         self.industry_decoded = [key for key, val in self.industries_dict.items() if val == selected_industry]
-        self.plugin_name_slug = self.create_slug(plugin_name)
+        self.plugin_name_slug = self.createSlug(plugin_name)
 
         self.es_url = (
             f"{FEED_URL}?industry={self.industry_decoded[0]}&plugin={self.plugin_name_slug}" if self.industry_decoded else FEED_URL
@@ -39,7 +46,7 @@ class QgisFeed:
 
         return re.sub(r'://|\.|:|/\?|=|&|-|:', '', url)
 
-    def create_slug(self, text):
+    def createSlug(self, text):
         """
         This function makes slug from a random text
         """
@@ -57,7 +64,7 @@ class QgisFeed:
         """
         Function registers QGIS Feed
         """
-        QgsMessageLog.logMessage('Registering feed')
+        MessageUtils.pushLogInfo('Zapisuję feed')
         for key in self.s.allKeys():
             if self.envirosolutionsFeedPattern_old.match(key) or self.envirosolutionsFeedPattern_new.match(key):
                 finalKey = re.sub(r'(\d+)', r'9999\1', key.replace(self.industry_url_short, 'httpsfeedqgisorg'))
@@ -68,7 +75,8 @@ class QgisFeed:
 
             if 'cache' in key:
                 check_fetch = self.checkIsFetchTime()
-                if check_fetch is True: self.s.remove(key)
+                if check_fetch is True:
+                    self.s.remove(key)
 
         self.s.sync()
         self.s.beginGroup(f"app/news-feed/items/{self.industry_url_short}")
@@ -104,7 +112,8 @@ class QgisFeed:
         """
 
         check_fetch = self.checkIsFetchTime()
-        if check_fetch is True: self.removeDismissed()
+        if check_fetch is True:
+            self.removeDismissed()
         self.parser.fetch()
 
 
@@ -113,12 +122,49 @@ class QgisFeedDialog(QDialog):
         super(QgisFeedDialog, self).__init__(parent)
         self.ui_file_path = os.path.join(os.path.dirname(__file__), 'ui', 'qgis_feed.ui')
         uic.loadUi(self.ui_file_path, self)
+        self._theme = None
 
         self.comboBox = self.findChild(QComboBox, 'comboBox')
         self.pushButton = self.findChild(QPushButton, 'pushButton')
+        # lista branż z constants.INDUSTRIES (kolejność słownika = kolejność na liście)
+        self.comboBox.clear()
+        for code, name in INDUSTRIES.items():
+            self.comboBox.addItem(name, code)
         self.pushButton.clicked.connect(self.onSaveClicked)
 
+        self._applyTheme()
         self.loadPreviousSelection()
+
+    # ------------------------------- Motyw -----------------------------------
+    def _applyTheme(self, force=False):
+        """Ustawia właściwość "theme" – kolory są zdefiniowane w arkuszu stylów ui/qgis_feed.ui."""
+        theme = 'dark' if ThemeUtils.isDarkTheme() else 'light'
+        if theme == self._theme and not force:
+            return
+        self._theme = theme
+        self.setProperty('theme', theme)
+        ThemeUtils.repolishAll(self)
+        self._setLogo()
+
+    def _setLogo(self, height=30):
+        """Logo w stopce: zielone na jasnym tle, białe na ciemnym (FOOTER_LOGOS w constants)."""
+        if self._theme is not None:
+            ThemeUtils.setLogo(self.lbl_logo, FOOTER_LOGOS[self._theme], height)
+
+    def showEvent(self, event):
+        self._applyTheme()
+        super().showEvent(event)
+        # dopiero po pokazaniu znana jest skala ekranu – inaczej logo jest rozpikselowane
+        self._setLogo()
+
+    def changeEvent(self, event):
+        # changeEvent przychodzi już w trakcie loadUi – wtedy _theme jeszcze nie istnieje
+        if (event.type() in (QEvent.Type.PaletteChange, QEvent.Type.StyleChange)
+                and getattr(self, '_theme', None) is not None):
+            self._applyTheme()
+        super().changeEvent(event)
+
+    # ------------------------------- Logika ----------------------------------
 
     def loadPreviousSelection(self):
         settings = QgsSettings()
@@ -129,7 +175,6 @@ class QgisFeedDialog(QDialog):
             self.hide()
 
     def onSaveClicked(self):
-        # zapisz wybraną branżę
         selected_industry = self.comboBox.currentText()
         settings = QgsSettings()
         settings.setValue("selected_industry", selected_industry)

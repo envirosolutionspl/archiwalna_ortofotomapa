@@ -1,0 +1,1050 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ArchiwalnaOrtofotomapaDockWidgetBase</class>
+ <widget class="QDockWidget" name="ArchiwalnaOrtofotomapaDockWidgetBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>385</width>
+    <height>260</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>385</width>
+    <height>260</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>524287</width>
+    <height>361</height>
+   </size>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../icons/archiwalna_logo.svg</normaloff>../icons/archiwalna_logo.svg</iconset>
+  </property>
+  <property name="windowTitle">
+   <string>Archiwalna Ortofotomapa</string>
+  </property>
+  <widget class="QWidget" name="dockWidgetContents">
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>339</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>7</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget#dockWidgetContents { background-color: #ffffff; }
+QLabel { background: transparent; color: #2b2b2b; }
+
+/* ---------- NAGŁÓWEK ---------- */
+QFrame#headerFrame { background-color: #ffffff; border: none; border-bottom: 2px solid #3d5a2a; }
+QLabel#lbl_title { color: #3d5a2a; font-size: 13pt; font-weight: bold; }
+QLabel#lbl_pluginVersion { color: #6b6b6b; font-size: 8pt; }
+QToolButton#btn_help {
+    background-color: #ffffff; color: #444444; font-weight: normal; font-size: 8pt;
+    outline: none; min-width: 22px; max-width: 22px; min-height: 22px; max-height: 22px;
+}
+QToolButton#btn_help:hover { color: #3d5a2a; border-color: #3d5a2a; }
+
+/* ---------- KARTA „PASEK CZASU” ---------- */
+QFrame#groupFrame { background-color: #ffffff; border: 1px solid #b9c7b9; border-radius: 8px; }
+QLabel#label_2 {
+    background-color: #b9c7b9; color: #2b2b2b; font-size: 9pt; font-weight: bold;
+    padding: 4px 4px; border: none;
+    border-top-left-radius: 7px; border-top-right-radius: 7px;
+}
+QLabel#lbl_selectedCaption { color: #6b6b6b; font-size: 7pt; }
+QLabel#timeLabel { color: #3d5a2a; font-size: 20pt; font-weight: bold; }
+QLabel#lbl_minYear, QLabel#lbl_maxYear { color: #444444; font-size: 7pt; }
+QLabel#lbl_info { color: #555555; font-size: 7pt; }
+
+QToolButton#btn_first, QToolButton#btn_prev, QToolButton#btn_next, QToolButton#btn_last {
+    background-color: #ffffff; color: #333333; font-size: 10pt; font-weight: bold;
+    border: 1px solid #c9cfc0; border-radius: 6px;
+    min-width: 24px; max-width: 24px; min-height: 24px; max-height: 24px;
+}
+QToolButton#btn_first:hover, QToolButton#btn_prev:hover,
+QToolButton#btn_next:hover, QToolButton#btn_last:hover { background-color: #f3f6ef; border-color: #3d5a2a; }
+QToolButton#btn_first:pressed, QToolButton#btn_prev:pressed,
+QToolButton#btn_next:pressed, QToolButton#btn_last:pressed { background-color: #e4e9dc; }
+QToolButton#btn_first:disabled, QToolButton#btn_prev:disabled,
+QToolButton#btn_next:disabled, QToolButton#btn_last:disabled { color: #c8c8c8; border-color: #e6e6e6; }
+
+QSlider#timeSlider { min-height: 18px; background: transparent; }
+QSlider#timeSlider::groove:horizontal { height: 6px; background: #e2e6dc; border-radius: 3px; }
+QSlider#timeSlider::sub-page:horizontal { background: #3d5a2a; border-radius: 3px; }
+QSlider#timeSlider::add-page:horizontal { background: #e2e6dc; border-radius: 3px; }
+QSlider#timeSlider::handle:horizontal {
+    background: #ffffff; border: 3px solid #3d5a2a;
+    width: 12px; height: 12px; margin: -6px 0; border-radius: 9px;
+}
+QSlider#timeSlider::handle:horizontal:hover { background: #f3f6ef; }
+
+/* ---------- STOPKA ---------- */
+QFrame#footerFrame { background-color: #eef3ee; border: none; border-top: 1px solid #d6dbcf; }
+QLabel#lbl_systemy, QLabel#lbl_szkolenia { font-size: 7pt; padding: 2px 1px; border: none; border-bottom: none }
+QLabel#lbl_esName { color: #3d5a2a; font-size: 13pt; }
+QLabel#lbl_esTagline { color: #555555; font-size: 5pt; font-weight: bold; }
+QLabel#lbl_copyrights { color: #8a8a8a; font-size: 5pt; }
+
+/* ---------- MOTYW CIEMNY (właściwość theme ustawia kod; reguły wyżej to motyw jasny) ---------- */
+QWidget#dockWidgetContents[theme=&quot;dark&quot;] { background-color: #2b2d2e; }
+QWidget[theme=&quot;dark&quot;] QLabel { color: #e6e9e7; }
+
+QWidget[theme=&quot;dark&quot;] QFrame#headerFrame { background-color: #2b2d2e; border-bottom: 2px solid #5a6162; }
+QWidget[theme=&quot;dark&quot;] QLabel#lbl_title { color: #a9cfac; }
+QWidget[theme=&quot;dark&quot;] QLabel#lbl_pluginVersion { color: #9aa4a0; }
+QWidget[theme=&quot;dark&quot;] QToolButton#btn_help { background-color: #2b2d2e; color: #e6e9e7; }
+QWidget[theme=&quot;dark&quot;] QToolButton#btn_help:hover { color: #a9cfac; border-color: #6f9c73; }
+
+QWidget[theme=&quot;dark&quot;] QFrame#groupFrame { background-color: #262829; border: 1px solid #4c6e4f; }
+QWidget[theme=&quot;dark&quot;] QLabel#label_2 { background-color: #4c6e4f; color: #ffffff; }
+QWidget[theme=&quot;dark&quot;] QLabel#lbl_selectedCaption { color: #9aa4a0; }
+QWidget[theme=&quot;dark&quot;] QLabel#timeLabel { color: #a9cfac; }
+QWidget[theme=&quot;dark&quot;] QLabel#lbl_minYear, QWidget[theme=&quot;dark&quot;] QLabel#lbl_maxYear { color: #b8c0bc; }
+QWidget[theme=&quot;dark&quot;] QLabel#lbl_info { color: #b8c0bc; }
+
+QWidget[theme=&quot;dark&quot;] QToolButton#btn_first, QWidget[theme=&quot;dark&quot;] QToolButton#btn_prev,
+QWidget[theme=&quot;dark&quot;] QToolButton#btn_next, QWidget[theme=&quot;dark&quot;] QToolButton#btn_last { background-color: #262829; color: #e6e9e7; border: 1px solid #5a6162; }
+QWidget[theme=&quot;dark&quot;] QToolButton#btn_first:hover, QWidget[theme=&quot;dark&quot;] QToolButton#btn_prev:hover,
+QWidget[theme=&quot;dark&quot;] QToolButton#btn_next:hover, QWidget[theme=&quot;dark&quot;] QToolButton#btn_last:hover { background-color: #2c3a2d; border-color: #6f9c73; }
+QWidget[theme=&quot;dark&quot;] QToolButton#btn_first:pressed, QWidget[theme=&quot;dark&quot;] QToolButton#btn_prev:pressed,
+QWidget[theme=&quot;dark&quot;] QToolButton#btn_next:pressed, QWidget[theme=&quot;dark&quot;] QToolButton#btn_last:pressed { background-color: #1f2a20; }
+QWidget[theme=&quot;dark&quot;] QToolButton#btn_first:disabled, QWidget[theme=&quot;dark&quot;] QToolButton#btn_prev:disabled,
+QWidget[theme=&quot;dark&quot;] QToolButton#btn_next:disabled, QWidget[theme=&quot;dark&quot;] QToolButton#btn_last:disabled { color: #6f7773; border-color: #3a3f40; }
+
+QWidget[theme=&quot;dark&quot;] QSlider#timeSlider::groove:horizontal { background: #44494a; }
+QWidget[theme=&quot;dark&quot;] QSlider#timeSlider::sub-page:horizontal { background: #6f9c73; }
+QWidget[theme=&quot;dark&quot;] QSlider#timeSlider::add-page:horizontal { background: #44494a; }
+QWidget[theme=&quot;dark&quot;] QSlider#timeSlider::handle:horizontal { background: #262829; border: 3px solid #e6e9e7; }
+QWidget[theme=&quot;dark&quot;] QSlider#timeSlider::handle:horizontal:hover { background: #2c3a2d; }
+
+QWidget[theme=&quot;dark&quot;] QFrame#footerFrame { background-color: #303334; border-top: 1px solid #44494a; }
+QWidget[theme=&quot;dark&quot;] QLabel#lbl_esName { color: #a9cfac; }
+QWidget[theme=&quot;dark&quot;] QLabel#lbl_esTagline { color: #9aa4a0; }
+QWidget[theme=&quot;dark&quot;] QLabel#lbl_copyrights { color: #8a918e; }</string>
+   </property>
+   <property name="theme" stdset="0">
+    <string notr="true">light</string>
+   </property>
+   <layout class="QVBoxLayout" name="mainLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QFrame" name="headerFrame">
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <layout class="QHBoxLayout" name="headerLayout">
+       <property name="spacing">
+        <number>8</number>
+       </property>
+       <property name="leftMargin">
+        <number>8</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>8</number>
+       </property>
+       <property name="bottomMargin">
+        <number>4</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="img_main">
+         <property name="minimumSize">
+          <size>
+           <width>35</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>35</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap>../icons/archiwalna_logo.svg</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="titleLayout">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="lbl_title">
+           <property name="text">
+            <string>Archiwalna Ortofotomapa</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="wordWrap">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lbl_pluginVersion">
+           <property name="text">
+            <string>Archiwalne ortofotomapy z geoportal.gov.pl · v1.2.1</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="wordWrap">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QToolButton" name="btn_help">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="palette">
+          <palette>
+           <active>
+            <colorrole role="WindowText">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>68</red>
+               <green>68</green>
+               <blue>68</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Button">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Text">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>68</red>
+               <green>68</green>
+               <blue>68</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="ButtonText">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>68</red>
+               <green>68</green>
+               <blue>68</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Base">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Window">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="PlaceholderText">
+             <brush brushstyle="SolidPattern">
+              <color alpha="128">
+               <red>68</red>
+               <green>68</green>
+               <blue>68</blue>
+              </color>
+             </brush>
+            </colorrole>
+           </active>
+           <inactive>
+            <colorrole role="WindowText">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>68</red>
+               <green>68</green>
+               <blue>68</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Button">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Text">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>68</red>
+               <green>68</green>
+               <blue>68</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="ButtonText">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>68</red>
+               <green>68</green>
+               <blue>68</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Base">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Window">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="PlaceholderText">
+             <brush brushstyle="SolidPattern">
+              <color alpha="128">
+               <red>68</red>
+               <green>68</green>
+               <blue>68</blue>
+              </color>
+             </brush>
+            </colorrole>
+           </inactive>
+           <disabled>
+            <colorrole role="WindowText">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>68</red>
+               <green>68</green>
+               <blue>68</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Button">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Text">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>68</red>
+               <green>68</green>
+               <blue>68</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="ButtonText">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>68</red>
+               <green>68</green>
+               <blue>68</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Base">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Window">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="PlaceholderText">
+             <brush brushstyle="SolidPattern">
+              <color alpha="128">
+               <red>68</red>
+               <green>68</green>
+               <blue>68</blue>
+              </color>
+             </brush>
+            </colorrole>
+           </disabled>
+          </palette>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip">
+          <string>Pomoc – strona wtyczki</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../icons/light/help_primary.svg</normaloff>../icons/light/help_primary.svg</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="btn_close">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip">
+          <string>Zamknij wtyczkę</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../../../../../../../../../../Downloads/uldk_gugik-dev_ml_149/uldk_gugik-dev_ml_149/images/close.svg</normaloff>../../../../../../../../../../Downloads/uldk_gugik-dev_ml_149/uldk_gugik-dev_ml_149/images/close.svg</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="contentLayout">
+      <property name="spacing">
+       <number>2</number>
+      </property>
+      <property name="leftMargin">
+       <number>8</number>
+      </property>
+      <property name="topMargin">
+       <number>4</number>
+      </property>
+      <property name="rightMargin">
+       <number>8</number>
+      </property>
+      <property name="bottomMargin">
+       <number>4</number>
+      </property>
+      <item>
+       <widget class="QFrame" name="groupFrame">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <layout class="QVBoxLayout" name="groupLayout">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Pasek czasu</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="groupBodyLayout">
+           <property name="spacing">
+            <number>2</number>
+           </property>
+           <property name="leftMargin">
+            <number>8</number>
+           </property>
+           <property name="topMargin">
+            <number>4</number>
+           </property>
+           <property name="rightMargin">
+            <number>8</number>
+           </property>
+           <property name="bottomMargin">
+            <number>4</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="lbl_selectedCaption">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;letter-spacing:2px;&quot;&gt;WYBRANY ROK&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="textFormat">
+              <enum>Qt::RichText</enum>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="navLayout">
+             <property name="spacing">
+              <number>6</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QToolButton" name="btn_first">
+               <property name="minimumSize">
+                <size>
+                 <width>26</width>
+                 <height>26</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>26</width>
+                 <height>26</height>
+                </size>
+               </property>
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="toolTip">
+                <string>Pierwszy dostępny rok</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>../icons/light/skip_first_primary_text.svg</normaloff>../icons/light/skip_first_primary_text.svg</iconset>
+               </property>
+               <property name="autoRaise">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="btn_prev">
+               <property name="minimumSize">
+                <size>
+                 <width>26</width>
+                 <height>26</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>26</width>
+                 <height>26</height>
+                </size>
+               </property>
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="toolTip">
+                <string>Poprzedni rok</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>../icons/light/chevron_left_primary_text.svg</normaloff>../icons/light/chevron_left_primary_text.svg</iconset>
+               </property>
+               <property name="autoRaise">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="navSpacerL">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="timeLabel">
+               <property name="font">
+                <font>
+                 <pointsize>20</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>2026</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="navSpacerR">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QToolButton" name="btn_next">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>26</width>
+                 <height>26</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>26</width>
+                 <height>26</height>
+                </size>
+               </property>
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="toolTip">
+                <string>Następny rok</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>../icons/light/chevron_right_primary_text.svg</normaloff>../icons/light/chevron_right_primary_text.svg</iconset>
+               </property>
+               <property name="autoRaise">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="btn_last">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>26</width>
+                 <height>26</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>26</width>
+                 <height>26</height>
+                </size>
+               </property>
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="toolTip">
+                <string>Ostatni dostępny rok</string>
+               </property>
+               <property name="text">
+                <string>›|</string>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>../icons/light/skip_last_primary_text.svg</normaloff>../icons/light/skip_last_primary_text.svg</iconset>
+               </property>
+               <property name="autoRaise">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QSlider" name="timeSlider">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>18</height>
+              </size>
+             </property>
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
+             <property name="minimum">
+              <number>1957</number>
+             </property>
+             <property name="maximum">
+              <number>2026</number>
+             </property>
+             <property name="pageStep">
+              <number>1</number>
+             </property>
+             <property name="value">
+              <number>2026</number>
+             </property>
+             <property name="sliderPosition">
+              <number>2026</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="tickPosition">
+              <enum>QSlider::NoTicks</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="rangeLayout">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="lbl_minYear">
+               <property name="text">
+                <string>1957</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="rangeSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="lbl_maxYear">
+               <property name="text">
+                <string>2026</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="lbl_info">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="text">
+              <string>Użyj suwaka lub strzałek, aby wyświetlić ortofotomapę z wybranego roku. Dostępność zdjęć zależy od obszaru.</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignJustify|Qt::AlignTop</set>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QFrame" name="footerFrame">
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <layout class="QVBoxLayout" name="footerOuterLayout">
+       <property name="spacing">
+        <number>2</number>
+       </property>
+       <property name="leftMargin">
+        <number>8</number>
+       </property>
+       <property name="topMargin">
+        <number>4</number>
+       </property>
+       <property name="rightMargin">
+        <number>8</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="footerLayout" stretch="0,0,0,0,0">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="lbl_systemy">
+           <property name="font">
+            <font>
+             <pointsize>7</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://envirosolutions.pl/systemy-opensource-gis/?utm_source=stopka&amp;amp;utm_medium=wtyczka&amp;amp;utm_campaign=organic&amp;amp;utm_term=archiwalna_ortofotomapa&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;SYSTEMY I WSPARCIE GIS&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::RichText</enum>
+           </property>
+           <property name="wordWrap">
+            <bool>false</bool>
+           </property>
+           <property name="openExternalLinks">
+            <bool>true</bool>
+           </property>
+           <property name="textInteractionFlags">
+            <set>Qt::TextBrowserInteraction</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="minimumSize">
+            <size>
+             <width>140</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>140</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap>../icons/es_logo_h.png</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="lbl_szkolenia">
+           <property name="text">
+            <string>&lt;a href=&quot;https://envirosolutions.pl/oferta-szkoleniowa/?utm_source=stopka&amp;utm_medium=wtyczka&amp;utm_campaign=organic&amp;utm_term=archiwalna_ortofotomapa&quot; style=&quot;text-decoration:underline;&quot;&gt;SZKOLENIA GIS&lt;/a&gt;</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::RichText</enum>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="wordWrap">
+            <bool>false</bool>
+           </property>
+           <property name="openExternalLinks">
+            <bool>true</bool>
+           </property>
+           <property name="textInteractionFlags">
+            <set>Qt::TextBrowserInteraction</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
