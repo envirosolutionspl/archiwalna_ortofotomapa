@@ -39,7 +39,7 @@ import os.path
 from . import PLUGIN_VERSION as plugin_version
 from .utils import MessageUtils, QtUtils
 from . import PLUGIN_NAME as plugin_name
-from .constants import ORTO_SERVICE_URL, WMS_BASE_PARAMS, WMS_TIME_SUFFIX, INITIAL_SCALE
+from .constants import ORTO_SERVICE_URL, WMS_BASE_PARAMS, WMS_TIME_SUFFIX, INITIAL_SCALE, INDUSTRIES
 
 
 
@@ -55,13 +55,21 @@ class ArchiwalnaOrtofotomapa:
         :type iface: QgsInterface
         """
 
+        # Save reference to the QGIS interface
+        # (przed QGIS Feed – okno wyboru branży potrzebuje iface.mainWindow() jako rodzica)
+        self.iface = iface
+
         if not is_tested:
-            self.settings = QgsSettings() 
+            self.settings = QgsSettings()
 
             if Qgis.QGIS_VERSION_INT >= 31000:
                 from .qgis_feed import QgisFeed
                 self.selected_industry = self.settings.value("selected_industry", None)
                 show_dialog = self.settings.value("showDialog", True, type=bool)
+
+                if self.selected_industry not in INDUSTRIES.values():
+                    self.selected_industry = None
+                    show_dialog = True
 
                 if self.selected_industry is None and show_dialog:
                     self.showBranchSelectionDialog()
@@ -70,9 +78,6 @@ class ArchiwalnaOrtofotomapa:
 
                 self.feed = QgisFeed(selected_industry=select_indust_session, plugin_name=plugin_name)
                 self.feed.initFeed()
-
-        # Save reference to the QGIS interface
-        self.iface = iface
 
         self.project = QgsProject.instance()
         self.nam = QgsNetworkAccessManager.instance()
@@ -315,13 +320,10 @@ class ArchiwalnaOrtofotomapa:
         self.canvas.refresh()
 
     def showBranchSelectionDialog(self):
-        self.qgisfeed_dialog = QgisFeedDialog()
-
-        if self.qgisfeed_dialog.exec() == QDialog.Accepted:
-            self.selected_branch = self.qgisfeed_dialog.comboBox.currentText()
-            
-            self.settings.setValue("selected_industry", self.selected_branch)  
-            self.settings.setValue("showDialog", False) 
+        """Wyświetla dialog wyboru branży dla QGIS Feed."""
+        dialog = QgisFeedDialog(self.iface.mainWindow())
+        dialog.exec()
+        self.selected_industry = self.settings.value("selected_industry", None)
 
     def ortoRemoval(self):
         """Function to remove the dockwidget and the orto layer when the layer is deleted"""
