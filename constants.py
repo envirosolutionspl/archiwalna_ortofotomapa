@@ -40,10 +40,6 @@ FOOTER_LINK_COLORS = {'light': '#4a5250', 'dark': '#b8c0bc'}
 
 FOOTER_LOGOS = {'light': 'es_logo_h.png', 'dark': 'ESENG_poz_white.png'}
 
-TITLE_BAR_COLORS = {'light': '#ffffff', 'dark': '#2b2d2e'}
-
-FOOTER_BG_COLORS = {'light': '#eef3ee', 'dark': '#303334'}
-
 THEME_ICONS = {
     'btn_help': 'help_primary.svg',
     'btn_first': 'skip_first_primary_text.svg',

@@ -7,7 +7,7 @@ name=Archiwalna Ortofotomapa
 qgisMinimumVersion=3.28
 qgisMaximumVersion=4.99
 description=Pozwala na wczytanie do QGIS archiwalnej ortofotomapy z geoportal.gov.pl. EN: Allows user to add archival orthophotomaps of Poland
-version=1.1.2
+version=2.0.0
 author=EnviroSolutions Sp. z o.o.
 email=gis@envirosolutions.pl
 supportsQt6=True
@@ -22,11 +22,16 @@ repository=https://github.com/envirosolutionspl/archiwalna_ortofotomapa
 
 hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
-changelog=Wersja 1.1.2
-   * zamiana przekierowania homepage, zmiana adresu email na aktualny
+changelog=Wersja 2.0.0
+   * Zmiana całego ui dotyczącego wtyczki.
+   * Zmiana ui dotyczącego QGIS Feed.
+   * Dodano funkcjonalności przycisków związanych z nowym ui.
+   * Dodano funkcje potrzebne do poprawnego wyświetlania ui.
 
+# Wersja 1.1.2
+# * Zamiana przekierowania hopepage, zmiana adresu email na aktualny.
 # Wersja 1.1.1
-# * Dodanie informacji o qgisMaximumVersion
+# * Dodanie informacji o qgisMaximumVersion.
 # Wersja 1.1.0
 # * Dodano testy automatyczne, sprawdzające poprawność wysyłanych requestów do geoportalu.
 # * Dodano logi informujące o procesie działania wtyczki.

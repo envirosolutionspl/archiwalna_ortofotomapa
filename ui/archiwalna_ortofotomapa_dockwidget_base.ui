@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>385</width>
-    <height>260</height>
+    <height>320</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>385</width>
-    <height>260</height>
+    <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>524287</width>
-    <height>361</height>
+    <height>400</height>
    </size>
   </property>
   <property name="windowIcon">
@@ -64,7 +64,7 @@ QLabel#label_2 {
 }
 QLabel#lbl_selectedCaption { color: #6b6b6b; font-size: 7pt; }
 QLabel#timeLabel { color: #3d5a2a; font-size: 20pt; font-weight: bold; }
-QLabel#lbl_minYear, QLabel#lbl_maxYear { color: #444444; font-size: 7pt; }
+QLabel#lbl_minYear, QLabel#lbl_maxYear { color: #444444; font-size: 7pt; font-weight: bold; }
 QLabel#lbl_info { color: #555555; font-size: 7pt; }
 
 QToolButton#btn_first, QToolButton#btn_prev, QToolButton#btn_next, QToolButton#btn_last {
@@ -165,7 +165,7 @@ QWidget[theme=&quot;dark&quot;] QLabel#lbl_copyrights { color: #8a918e; }</strin
         <number>8</number>
        </property>
        <property name="topMargin">
-        <number>0</number>
+        <number>4</number>
        </property>
        <property name="rightMargin">
         <number>8</number>
@@ -516,19 +516,19 @@ QWidget[theme=&quot;dark&quot;] QLabel#lbl_copyrights { color: #8a918e; }</strin
     <item>
      <layout class="QVBoxLayout" name="contentLayout">
       <property name="spacing">
-       <number>2</number>
+       <number>4</number>
       </property>
       <property name="leftMargin">
        <number>8</number>
       </property>
       <property name="topMargin">
-       <number>4</number>
+       <number>6</number>
       </property>
       <property name="rightMargin">
        <number>8</number>
       </property>
       <property name="bottomMargin">
-       <number>4</number>
+       <number>6</number>
       </property>
       <item>
        <widget class="QFrame" name="groupFrame">
@@ -537,7 +537,7 @@ QWidget[theme=&quot;dark&quot;] QLabel#lbl_copyrights { color: #8a918e; }</strin
         </property>
         <layout class="QVBoxLayout" name="groupLayout">
          <property name="spacing">
-          <number>2</number>
+          <number>8</number>
          </property>
          <property name="leftMargin">
           <number>0</number>
@@ -549,7 +549,7 @@ QWidget[theme=&quot;dark&quot;] QLabel#lbl_copyrights { color: #8a918e; }</strin
           <number>0</number>
          </property>
          <property name="bottomMargin">
-          <number>0</number>
+          <number>4</number>
          </property>
          <item>
           <widget class="QLabel" name="label_2">
@@ -576,7 +576,7 @@ QWidget[theme=&quot;dark&quot;] QLabel#lbl_copyrights { color: #8a918e; }</strin
             <number>8</number>
            </property>
            <property name="bottomMargin">
-            <number>4</number>
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="lbl_selectedCaption">
@@ -888,7 +888,7 @@ QWidget[theme=&quot;dark&quot;] QLabel#lbl_copyrights { color: #8a918e; }</strin
               <string>Użyj suwaka lub strzałek, aby wyświetlić ortofotomapę z wybranego roku. Dostępność zdjęć zależy od obszaru.</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignJustify|Qt::AlignTop</set>
+              <set>Qt::AlignJustify|Qt::AlignVCenter</set>
              </property>
              <property name="wordWrap">
               <bool>true</bool>
@@ -899,6 +899,19 @@ QWidget[theme=&quot;dark&quot;] QLabel#lbl_copyrights { color: #8a918e; }</strin
          </item>
         </layout>
        </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>0</width>
+          <height>5</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </item>
@@ -912,16 +925,16 @@ QWidget[theme=&quot;dark&quot;] QLabel#lbl_copyrights { color: #8a918e; }</strin
         <number>2</number>
        </property>
        <property name="leftMargin">
-        <number>8</number>
-       </property>
-       <property name="topMargin">
         <number>4</number>
        </property>
-       <property name="rightMargin">
+       <property name="topMargin">
         <number>8</number>
        </property>
+       <property name="rightMargin">
+        <number>4</number>
+       </property>
        <property name="bottomMargin">
-        <number>0</number>
+        <number>8</number>
        </property>
        <item>
         <layout class="QHBoxLayout" name="footerLayout" stretch="0,0,0,0,0">
@@ -948,7 +961,7 @@ QWidget[theme=&quot;dark&quot;] QLabel#lbl_copyrights { color: #8a918e; }</strin
             </font>
            </property>
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://envirosolutions.pl/systemy-opensource-gis/?utm_source=stopka&amp;amp;utm_medium=wtyczka&amp;amp;utm_campaign=organic&amp;amp;utm_term=archiwalna_ortofotomapa&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;SYSTEMY I WSPARCIE GIS&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://envirosolutions.pl/?utm_source=plugins&amp;utm_medium=referral&amp;utm_campaign=archiwalna_ortofotomapa&amp;utm_content=systemy_wsparcie#uslugi&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;SYSTEMY I WSPARCIE GIS&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="textFormat">
             <enum>Qt::RichText</enum>
