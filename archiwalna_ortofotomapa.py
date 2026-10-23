@@ -64,9 +64,12 @@ class ArchiwalnaOrtofotomapa:
 
             if Qgis.QGIS_VERSION_INT >= 31000:
                 from .qgis_feed import QgisFeed
+
+                # qgis feed
                 self.selected_industry = self.settings.value("selected_industry", None)
                 show_dialog = self.settings.value("showDialog", True, type=bool)
 
+                # wczytywanie branży jeżeli nie jest zgodna z aktualnym słownikiem
                 if self.selected_industry not in INDUSTRIES.values():
                     self.selected_industry = None
                     show_dialog = True
@@ -113,10 +116,10 @@ class ArchiwalnaOrtofotomapa:
             self.dockwidget = ArchiwalnaOrtofotomapaDockWidget()
             
             # Connect to slider signals directly (once during initialization)
-            self.dockwidget.timeSlider.valueChanged.connect(self.sliderChanged)
-            self.dockwidget.timeSlider.sliderReleased.connect(self.sliderReleased)
-            self.dockwidget.timeSlider.sliderPressed.connect(self.sliderPressed)
-            self.dockwidget.timeSlider.sliderMoved.connect(self.sliderMoved)
+            self.dockwidget.time_slider.valueChanged.connect(self.sliderChanged)
+            self.dockwidget.time_slider.sliderReleased.connect(self.sliderReleased)
+            self.dockwidget.time_slider.sliderPressed.connect(self.sliderPressed)
+            self.dockwidget.time_slider.sliderMoved.connect(self.sliderMoved)
             self.dockwidget.closingPlugin.connect(self.onClosePlugin)
 
             self.canvas = self.iface.mapCanvas()
@@ -291,8 +294,8 @@ class ArchiwalnaOrtofotomapa:
             self.dockwidget.show()
             MessageUtils.pushLogInfo("Dockwidget ustawiony")
 
-            self.orto = QgsRasterLayer(self.makeDataSourceUri(self.dockwidget.timeSlider.value()),
-                                       "Ortofotomapa Archiwalna %d" % self.dockwidget.timeSlider.value(),
+            self.orto = QgsRasterLayer(self.makeDataSourceUri(self.dockwidget.time_slider.value()),
+                                       "Ortofotomapa Archiwalna %d" % self.dockwidget.time_slider.value(),
                                        'wms')
             self.orto.willBeDeleted.connect(self.ortoRemoval)
             if not self.orto.isValid():
@@ -337,7 +340,7 @@ class ArchiwalnaOrtofotomapa:
         """Function to update the label with the current year"""
 
         # Update the label with current year
-        self.dockwidget.timeLabel.setText(str(self.dockwidget.timeSlider.value()))
+        self.dockwidget.timeLabel.setText(str(self.dockwidget.time_slider.value()))
         
         if self.orto is None:
             return
@@ -365,7 +368,7 @@ class ArchiwalnaOrtofotomapa:
     def changeOrtoLayer(self):
         """Function to change the name of the orto layer after changing the year"""
 
-        year = self.dockwidget.timeSlider.value()
+        year = self.dockwidget.time_slider.value()
         uri = self.makeDataSourceUri(year)
         self.orto.dataProvider().setDataSourceUri(uri)
         self.orto.triggerRepaint()

@@ -69,8 +69,8 @@ class ArchiwalnaOrtofotomapaDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.lbl_maxYear.setText(str(self.currentYear))
         
         # Initialize slider min/max values
-        self.timeSlider.setMinimum(OLDEST_ORTO_YEAR)
-        self.timeSlider.setMaximum(self.currentYear)
+        self.time_slider.setMinimum(OLDEST_ORTO_YEAR)
+        self.time_slider.setMaximum(self.currentYear)
         
         # Internal state for slider
         self.isSliderPressed = False
@@ -140,30 +140,32 @@ class ArchiwalnaOrtofotomapaDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
     def _connectButtons(self):
         self.btn_help.clicked.connect(self._openHelp)
         self.btn_close.clicked.connect(self.close)
-        self.btn_first.clicked.connect(lambda: self.timeSlider.setValue(self.timeSlider.minimum()))
-        self.btn_last.clicked.connect(lambda: self.timeSlider.setValue(self.timeSlider.maximum()))
+        self.btn_first.clicked.connect(lambda: self.time_slider.setValue(self.time_slider.minimum()))
+        self.btn_last.clicked.connect(lambda: self.time_slider.setValue(self.time_slider.maximum()))
         self.btn_next.clicked.connect(lambda: self._changeYear(1))
         self.btn_prev.clicked.connect(lambda: self._changeYear(-1))
-        self.timeSlider.valueChanged.connect(self._updateNavButtons)
+        self.time_slider.valueChanged.connect(self._updateNavButtons)
 
     def _changeYear(self, change_value):
-        self.timeSlider.setValue(self.timeSlider.value() + change_value)
+        self.time_slider.setValue(self.time_slider.value() + change_value)
 
     def _updateNavButtons(self):
-        value = self.timeSlider.value()
-        atMax = value >= self.timeSlider.maximum()
-        atMin = value <= self.timeSlider.minimum()
-        self.btn_next.setEnabled(not atMax)
-        self.btn_last.setEnabled(not atMax)
-        self.btn_prev.setEnabled(not atMin)
-        self.btn_first.setEnabled(not atMin)
+        value = self.time_slider.value()
+        at_max = value >= self.time_slider.maximum()
+        at_min = value <= self.time_slider.minimum()
+        self.btn_next.setEnabled(not at_max)
+        self.btn_last.setEnabled(not at_max)
+        self.btn_prev.setEnabled(not at_min)
+        self.btn_first.setEnabled(not at_min)
 
     def setSliderToMaxYear(self):
         """Sets the slider to the maximum year (current year)."""
         self.currentYear = datetime.now().year
-        self.timeSlider.setMaximum(self.currentYear)
-        self.timeSlider.setSliderPosition(self.currentYear)
+        self.time_slider.setMaximum(self.currentYear)
+        self.time_slider.setSliderPosition(self.currentYear)
         self.timeLabel.setText(str(self.currentYear))
+        self.lbl_minYear.setText(str(OLDEST_ORTO_YEAR))
+        self.lbl_maxYear.setText(str(self.currentYear))
 
     def _openHelp(self):
         url = self._readHomepage() or HOME_LINK

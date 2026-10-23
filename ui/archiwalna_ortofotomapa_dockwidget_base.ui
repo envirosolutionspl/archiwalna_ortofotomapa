@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>385</width>
-    <height>320</height>
+    <width>400</width>
+    <height>299</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>385</width>
-    <height>0</height>
+    <width>400</width>
+    <height>200</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -33,7 +33,7 @@
    <property name="maximumSize">
     <size>
      <width>16777215</width>
-     <height>339</height>
+     <height>400</height>
     </size>
    </property>
    <property name="font">
@@ -58,14 +58,14 @@ QToolButton#btn_help:hover { color: #3d5a2a; border-color: #3d5a2a; }
 /* ---------- KARTA „PASEK CZASU” ---------- */
 QFrame#groupFrame { background-color: #ffffff; border: 1px solid #b9c7b9; border-radius: 8px; }
 QLabel#label_2 {
-    background-color: #b9c7b9; color: #2b2b2b; font-size: 9pt; font-weight: bold;
+    background-color: #b9c7b9; color: #2b2b2b; font-size: 11pt; font-weight: bold;
     padding: 4px 4px; border: none;
     border-top-left-radius: 7px; border-top-right-radius: 7px;
 }
 QLabel#lbl_selectedCaption { color: #6b6b6b; font-size: 7pt; }
-QLabel#timeLabel { color: #3d5a2a; font-size: 20pt; font-weight: bold; }
-QLabel#lbl_minYear, QLabel#lbl_maxYear { color: #444444; font-size: 7pt; font-weight: bold; }
-QLabel#lbl_info { color: #555555; font-size: 7pt; }
+QLabel#timeLabel { color: #3d5a2a; font-size: 22pt; font-weight: bold; }
+QLabel#lbl_minYear, QLabel#lbl_maxYear { color: #444444; font-size: 10pt; font-weight: bold; }
+QLabel#lbl_info { color: #555555; font-size: 9pt; }
 
 QToolButton#btn_first, QToolButton#btn_prev, QToolButton#btn_next, QToolButton#btn_last {
     background-color: #ffffff; color: #333333; font-size: 10pt; font-weight: bold;
@@ -79,24 +79,24 @@ QToolButton#btn_next:pressed, QToolButton#btn_last:pressed { background-color: #
 QToolButton#btn_first:disabled, QToolButton#btn_prev:disabled,
 QToolButton#btn_next:disabled, QToolButton#btn_last:disabled { color: #c8c8c8; border-color: #e6e6e6; }
 
-QSlider#timeSlider { min-height: 18px; background: transparent; }
-QSlider#timeSlider::groove:horizontal { height: 6px; background: #e2e6dc; border-radius: 3px; }
-QSlider#timeSlider::sub-page:horizontal { background: #3d5a2a; border-radius: 3px; }
-QSlider#timeSlider::add-page:horizontal { background: #e2e6dc; border-radius: 3px; }
-QSlider#timeSlider::handle:horizontal {
+QSlider#time_slider { min-height: 18px; background: transparent; }
+QSlider#time_slider::groove:horizontal { height: 6px; background: #e2e6dc; border-radius: 3px; }
+QSlider#time_slider::sub-page:horizontal { background: #3d5a2a; border-radius: 3px; }
+QSlider#time_slider::add-page:horizontal { background: #e2e6dc; border-radius: 3px; }
+QSlider#time_slider::handle:horizontal {
     background: #ffffff; border: 3px solid #3d5a2a;
     width: 12px; height: 12px; margin: -6px 0; border-radius: 9px;
 }
-QSlider#timeSlider::handle:horizontal:hover { background: #f3f6ef; }
+QSlider#time_slider::handle:horizontal:hover { background: #f3f6ef; }
 
 /* ---------- STOPKA ---------- */
 QFrame#footerFrame { background-color: #eef3ee; border: none; border-top: 1px solid #d6dbcf; }
-QLabel#lbl_systemy, QLabel#lbl_szkolenia { font-size: 7pt; padding: 2px 1px; border: none; border-bottom: none }
+QLabel#lbl_systemy, QLabel#lbl_szkolenia { font-size: 8pt; padding: 2px 1px; border: none; border-bottom: none }
 QLabel#lbl_esName { color: #3d5a2a; font-size: 13pt; }
 QLabel#lbl_esTagline { color: #555555; font-size: 5pt; font-weight: bold; }
 QLabel#lbl_copyrights { color: #8a8a8a; font-size: 5pt; }
 
-/* ---------- MOTYW CIEMNY (właściwość theme ustawia kod; reguły wyżej to motyw jasny) ---------- */
+/* ---------- MOTYW CIEMNY ---------- */
 QWidget#dockWidgetContents[theme=&quot;dark&quot;] { background-color: #2b2d2e; }
 QWidget[theme=&quot;dark&quot;] QLabel { color: #e6e9e7; }
 
@@ -122,11 +122,11 @@ QWidget[theme=&quot;dark&quot;] QToolButton#btn_next:pressed, QWidget[theme=&quo
 QWidget[theme=&quot;dark&quot;] QToolButton#btn_first:disabled, QWidget[theme=&quot;dark&quot;] QToolButton#btn_prev:disabled,
 QWidget[theme=&quot;dark&quot;] QToolButton#btn_next:disabled, QWidget[theme=&quot;dark&quot;] QToolButton#btn_last:disabled { color: #6f7773; border-color: #3a3f40; }
 
-QWidget[theme=&quot;dark&quot;] QSlider#timeSlider::groove:horizontal { background: #44494a; }
-QWidget[theme=&quot;dark&quot;] QSlider#timeSlider::sub-page:horizontal { background: #6f9c73; }
-QWidget[theme=&quot;dark&quot;] QSlider#timeSlider::add-page:horizontal { background: #44494a; }
-QWidget[theme=&quot;dark&quot;] QSlider#timeSlider::handle:horizontal { background: #262829; border: 3px solid #e6e9e7; }
-QWidget[theme=&quot;dark&quot;] QSlider#timeSlider::handle:horizontal:hover { background: #2c3a2d; }
+QWidget[theme=&quot;dark&quot;] QSlider#time_slider::groove:horizontal { background: #44494a; }
+QWidget[theme=&quot;dark&quot;] QSlider#time_slider::sub-page:horizontal { background: #6f9c73; }
+QWidget[theme=&quot;dark&quot;] QSlider#time_slider::add-page:horizontal { background: #44494a; }
+QWidget[theme=&quot;dark&quot;] QSlider#time_slider::handle:horizontal { background: #262829; border: 3px solid #e6e9e7; }
+QWidget[theme=&quot;dark&quot;] QSlider#time_slider::handle:horizontal:hover { background: #2c3a2d; }
 
 QWidget[theme=&quot;dark&quot;] QFrame#footerFrame { background-color: #303334; border-top: 1px solid #44494a; }
 QWidget[theme=&quot;dark&quot;] QLabel#lbl_esName { color: #a9cfac; }
@@ -497,7 +497,7 @@ QWidget[theme=&quot;dark&quot;] QLabel#lbl_copyrights { color: #8a918e; }</strin
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../../../../../../../../Downloads/uldk_gugik-dev_ml_149/uldk_gugik-dev_ml_149/images/close.svg</normaloff>../../../../../../../../../../Downloads/uldk_gugik-dev_ml_149/uldk_gugik-dev_ml_149/images/close.svg</iconset>
+           <normaloff>../images/close.svg</normaloff>../images/close.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -689,7 +689,7 @@ QWidget[theme=&quot;dark&quot;] QLabel#lbl_copyrights { color: #8a918e; }</strin
               <widget class="QLabel" name="timeLabel">
                <property name="font">
                 <font>
-                 <pointsize>20</pointsize>
+                 <pointsize>22</pointsize>
                  <weight>75</weight>
                  <bold>true</bold>
                 </font>
@@ -788,7 +788,7 @@ QWidget[theme=&quot;dark&quot;] QLabel#lbl_copyrights { color: #8a918e; }</strin
             </layout>
            </item>
            <item>
-            <widget class="QSlider" name="timeSlider">
+            <widget class="QSlider" name="time_slider">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -957,7 +957,7 @@ QWidget[theme=&quot;dark&quot;] QLabel#lbl_copyrights { color: #8a918e; }</strin
           <widget class="QLabel" name="lbl_systemy">
            <property name="font">
             <font>
-             <pointsize>7</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
@@ -994,14 +994,14 @@ QWidget[theme=&quot;dark&quot;] QLabel#lbl_copyrights { color: #8a918e; }</strin
           <widget class="QLabel" name="label">
            <property name="minimumSize">
             <size>
-             <width>140</width>
-             <height>32</height>
+             <width>168</width>
+             <height>38</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>140</width>
-             <height>32</height>
+             <width>168</width>
+             <height>38</height>
             </size>
            </property>
            <property name="text">
