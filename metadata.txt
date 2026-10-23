@@ -29,7 +29,7 @@ changelog=Wersja 2.0.0
    * Dodano funkcje potrzebne do poprawnego wyświetlania ui.
 
 # Wersja 1.1.2
-# * Zamiana przekierowania hopepage, zmiana adresu email na aktualny.
+# * Zamiana przekierowania homepage, zmiana adresu email na aktualny.
 # Wersja 1.1.1
 # * Dodanie informacji o qgisMaximumVersion.
 # Wersja 1.1.0

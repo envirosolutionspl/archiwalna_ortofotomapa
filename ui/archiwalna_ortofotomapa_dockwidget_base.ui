@@ -1031,7 +1031,7 @@ QWidget[theme=&quot;dark&quot;] QLabel#lbl_copyrights { color: #8a918e; }</strin
          <item>
           <widget class="QLabel" name="lbl_szkolenia">
            <property name="text">
-            <string>&lt;a href=&quot;https://envirosolutions.pl/oferta-szkoleniowa/?utm_source=stopka&amp;utm_medium=wtyczka&amp;utm_campaign=organic&amp;utm_term=archiwalna_ortofotomapa&quot; style=&quot;text-decoration:underline;&quot;&gt;SZKOLENIA GIS&lt;/a&gt;</string>
+            <string>&lt;a href=&quot;https://envirosolutions.pl/oferta-szkoleniowa/?utm_source=plugins&amp;utm_medium=referral&amp;utm_campaign=archiwalna_ortofotomapa&amp;utm_content=szkolenia_gis&quot; style=&quot;text-decoration:underline;&quot;&gt;SZKOLENIA GIS&lt;/a&gt;</string>
            </property>
            <property name="textFormat">
             <enum>Qt::RichText</enum>

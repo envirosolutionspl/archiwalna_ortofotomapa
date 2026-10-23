@@ -281,7 +281,7 @@ class ArchiwalnaOrtofotomapa:
 
             # Version info
             self.dockwidget.setWindowTitle('%s %s' % (plugin_name, plugin_version))
-            self.dockwidget.lbl_pluginVersion.setText('%s %s' % ("Archiwalne ortofotomapy z geoprotal.gov.pl ·", plugin_version))
+            self.dockwidget.lbl_pluginVersion.setText('%s %s' % ("Archiwalne ortofotomapy z geoportal.gov.pl ·", plugin_version))
 
             # show the dockwidget
             # TODO: fix to allow choice of dock location
