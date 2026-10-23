@@ -29,3 +29,18 @@ WMS_BASE_PARAMS = "IgnoreGetFeatureInfoUrl=1&IgnoreGetMapUrl=1&contextualWMSLege
 WMS_TIME_SUFFIX = "-01-01T00%3A00%3A00.000%2B01%3A00"
 
 INITIAL_SCALE = 37147
+
+HOME_LINK = 'https://envirosolutions.pl/wtyczki-qgis/archiwalna-ortofotomapa/'
+
+FOOTER_LINK_COLORS = {'light': '#4a5250', 'dark': '#b8c0bc'}
+
+FOOTER_LOGOS = {'light': 'es_logo_h.png', 'dark': 'ESENG_poz_white.png'}
+
+THEME_ICONS = {
+    'btn_help': 'help_primary.svg',
+    'btn_first': 'skip_first_primary_text.svg',
+    'btn_prev': 'chevron_left_primary_text.svg',
+    'btn_next': 'chevron_right_primary_text.svg',
+    'btn_last': 'skip_last_primary_text.svg',
+    'btn_close': 'close.svg'
+}

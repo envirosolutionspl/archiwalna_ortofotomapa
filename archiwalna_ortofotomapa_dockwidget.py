@@ -24,15 +24,22 @@
 """
 
 import os
+import re
+import configparser
 from datetime import datetime
 
-from qgis.PyQt import QtGui, QtWidgets, uic
-from qgis.PyQt.QtCore import pyqtSignal
-from .constants import OLDEST_ORTO_YEAR
+from qgis.PyQt import QtWidgets, uic
+from qgis.PyQt.QtCore import pyqtSignal, QEvent, QTimer, QUrl
+from qgis.PyQt.QtGui import QDesktopServices
+from .constants import (
+    OLDEST_ORTO_YEAR, HOME_LINK,
+    FOOTER_LINK_COLORS, FOOTER_LOGOS, THEME_ICONS
+    )
+from .utils import ThemeUtils
 
-FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'archiwalna_ortofotomapa_dockwidget_base.ui'))
+PLUGIN_DIR = os.path.dirname(__file__)
 
+FORM_CLASS, _ = uic.loadUiType(os.path.join(PLUGIN_DIR, 'ui', 'archiwalna_ortofotomapa_dockwidget_base.ui'))
 
 class ArchiwalnaOrtofotomapaDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
@@ -48,28 +55,144 @@ class ArchiwalnaOrtofotomapaDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         # http://doc.qt.io/qt-5/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
+        self.setTitleBarWidget(self._takeHeader())
+        self._theme = None
+        self._applyTheme()
         self.img_main.setContentsMargins(3, 3, 3, 3)
-        
+        self._connectButtons()
+        self._fitPending = False
+        self.widget().installEventFilter(self)
+
         # Store current year
         self.currentYear = datetime.now().year
+        self.lbl_minYear.setText(str(OLDEST_ORTO_YEAR))
+        self.lbl_maxYear.setText(str(self.currentYear))
         
         # Initialize slider min/max values
-        self.timeSlider.setMinimum(OLDEST_ORTO_YEAR)
-        self.timeSlider.setMaximum(self.currentYear)
+        self.time_slider.setMinimum(OLDEST_ORTO_YEAR)
+        self.time_slider.setMaximum(self.currentYear)
         
         # Internal state for slider
         self.isSliderPressed = False
         
         # Set slider to current year by default
         self.setSliderToMaxYear()
+        self._updateNavButtons()
+
+    def _applyTheme(self, force=False):
+        theme = 'dark' if ThemeUtils.isDarkTheme() else 'light'
+        if theme == self._theme and not force:
+            return
+        self._theme = theme
+        self.widget().setProperty('theme', theme)
+        # The header sits in the dock's title bar, outside the contents widget
+        self.titleBarWidget().setProperty('theme', theme)
+        ThemeUtils.repolishAll(self)
+        color = FOOTER_LINK_COLORS[theme]
+        for lbl in (self.lbl_systemy, self.lbl_szkolenia):
+            lbl.setText(re.sub(r'style="[^"]*"', 'style="text-decoration:underline; color:%s;"' % color, lbl.text()))
+        for name, filename in THEME_ICONS.items():
+            getattr(self, name).setIcon(ThemeUtils.themedIcon(os.path.join(PLUGIN_DIR, 'icons', theme, filename)))
+        self._setFooterLogo(FOOTER_LOGOS[theme])
+
+    def _setFooterLogo(self, filename, height=30):
+        ThemeUtils.setLogo(self.label, filename, height)
+
+    def showEvent(self, event):
+        self._applyTheme()
+        super().showEvent(event)
+        self._setFooterLogo(FOOTER_LOGOS[self._theme])
+
+    def changeEvent(self, event):
+        if (event.type() in (QEvent.Type.PaletteChange, QEvent.Type.StyleChange)
+                and getattr(self, '_theme', None) is not None):
+            self._applyTheme()
+        super().changeEvent(event)
+
+    def _scheduleFit(self):
+        """Runs _fitHeightToContents once the pending layout events are processed,
+        so nested layouts report heights for the current width, not a stale one."""
+        if not self._fitPending:
+            self._fitPending = True
+            QTimer.singleShot(0, self._fitHeightToContents)
+
+    def _fitHeightToContents(self):
+        """Sets the contents minimum height to what the current width needs:
+        Qt counts the word-wrapped info text as one line, so without this
+        the smallest dock would clip it."""
+        self._fitPending = False
+        contents = self.widget()
+        layout = contents.layout()
+        needed = layout.heightForWidth(contents.width()) if layout.hasHeightForWidth() else -1
+        if needed < 0:
+            needed = layout.sizeHint().height()
+        if contents.minimumHeight() != needed:
+            contents.setMinimumHeight(needed)
+
+    def eventFilter(self, obj, event):
+        # Watch the contents widget itself, not the dock: its width can change
+        # without the dock being resized (docking, restoring QGIS layout), and
+        # LayoutRequest covers text or font changes inside it.
+        if obj is self.widget() and event.type() in (QEvent.Type.Resize, QEvent.Type.LayoutRequest):
+            self._scheduleFit()
+        return super().eventFilter(obj, event)
+
+    def _connectButtons(self):
+        self.btn_help.clicked.connect(self._openHelp)
+        self.btn_close.clicked.connect(self.close)
+        self.btn_first.clicked.connect(lambda: self.time_slider.setValue(self.time_slider.minimum()))
+        self.btn_last.clicked.connect(lambda: self.time_slider.setValue(self.time_slider.maximum()))
+        self.btn_next.clicked.connect(lambda: self._changeYear(1))
+        self.btn_prev.clicked.connect(lambda: self._changeYear(-1))
+        self.time_slider.valueChanged.connect(self._updateNavButtons)
+
+    def _changeYear(self, change_value):
+        self.time_slider.setValue(self.time_slider.value() + change_value)
+
+    def _updateNavButtons(self):
+        value = self.time_slider.value()
+        at_max = value >= self.time_slider.maximum()
+        at_min = value <= self.time_slider.minimum()
+        self.btn_next.setEnabled(not at_max)
+        self.btn_last.setEnabled(not at_max)
+        self.btn_prev.setEnabled(not at_min)
+        self.btn_first.setEnabled(not at_min)
 
     def setSliderToMaxYear(self):
         """Sets the slider to the maximum year (current year)."""
         self.currentYear = datetime.now().year
-        self.timeSlider.setMaximum(self.currentYear)
-        self.timeSlider.setSliderPosition(self.currentYear)
+        self.time_slider.setMaximum(self.currentYear)
+        self.time_slider.setSliderPosition(self.currentYear)
         self.timeLabel.setText(str(self.currentYear))
+        self.lbl_minYear.setText(str(OLDEST_ORTO_YEAR))
+        self.lbl_maxYear.setText(str(self.currentYear))
+
+    def _openHelp(self):
+        url = self._readHomepage() or HOME_LINK
+        QDesktopServices.openUrl(QUrl(url))  
+
+    def _takeHeader(self):
+        """Moves the header out of the contents into a container used as the
+        dock's title bar, so the dock is dragged and docked by the header."""
+        contents = self.widget()
+        contents.layout().removeWidget(self.headerFrame)
+        container = QtWidgets.QWidget(self)
+        container.setStyleSheet(contents.styleSheet())
+        layout = QtWidgets.QVBoxLayout(container)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        layout.addWidget(self.headerFrame)
+        return container
 
     def closeEvent(self, event):
         self.closingPlugin.emit()
         event.accept()
+
+    @staticmethod
+    def _readHomepage():
+        parser = configparser.ConfigParser(interpolation=None)
+        try:
+            parser.read(os.path.join(PLUGIN_DIR, 'metadata.txt'), encoding='utf-8')
+            return parser.get('general', 'homepage', fallback='')
+        except Exception:
+            return ''
