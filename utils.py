@@ -41,11 +41,15 @@ class MessageUtils:
         )
 
 class ThemeUtils:
-    """Motyw jasny/ciemny i logo dla okna wtyczki."""
+    """
+    Motyw jasny/ciemny i logo dla okna wtyczki
+    """
 
     @staticmethod
     def isDarkTheme():
-        """Ciemny motyw QGIS (np. Night Mapping) albo ciemna paleta systemu."""
+        """
+        Ciemny motyw QGIS (np. Night Mapping) albo ciemna paleta systemu
+        """
         name = ''
         try:
             theme_name = (QgsApplication.themeName() or '').lower()
