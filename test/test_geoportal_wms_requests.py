@@ -5,13 +5,13 @@ import importlib
 from unittest.mock import MagicMock
 from .constants import YEARS 
 
-# Dynamic path and package name setup
+# Dynamiczna sciezka i konfiguracja nazwy pakietu
 current_dir = os.path.dirname(os.path.abspath(__file__))
 plugin_dir = os.path.dirname(current_dir)
 plugins_dir = os.path.dirname(plugin_dir)
 sys.path.insert(0, plugins_dir)
 
-# Get plugin folder name
+# nazwa folderu wtyczki
 plugin_package_name = os.path.basename(plugin_dir)
 
 from qgis.PyQt.QtCore import QObject, QT_VERSION_STR
@@ -22,7 +22,7 @@ from qgis.core import (
     QgsNetworkAccessManager
 )
 
-# Import utils dynamically using the established package name
+# Dynamiczne importowanie utilsow z wykorzystaniem ustalonej nazwy pakietu
 utils_module = importlib.import_module(f"{plugin_package_name}.utils")
 Utils = utils_module.QtUtils
 
@@ -38,7 +38,7 @@ class NetworkLogger(QObject):
         self.reply_received = False 
 
     def on_finished(self, reply):
-        # Use the utilities function to check for Qt version just like in the main plugin code
+        # Uzycie funkcji utils do sprawdzenia wersji QT tak jak w kodzie glownej wtyczki
         if Utils.isCompatibleQtVersion(QT_VERSION_STR, 6):
              # Qt6
             attr = QNetworkRequest.Attribute.HttpStatusCodeAttribute
@@ -72,12 +72,12 @@ class TestGeoportalFutureProof(unittest.TestCase):
         
         cls.test_results = []
 
-        # Import plugin module
+        # Importowanie modulu wtyczki
         module_name = f"{plugin_package_name}.archiwalna_ortofotomapa"
         plugin_module = importlib.import_module(module_name)
         cls.ArchiwalnaOrtofotomapa = plugin_module.ArchiwalnaOrtofotomapa 
 
-        # Initialize plugin in test mode (without UI and heavy dependencies)
+        # Inicjalizacja wtyczki w trybie testowym (bez UI i ciezkich zaleznosci)
         cls.iface_mock = MagicMock()
         cls.plugin = cls.ArchiwalnaOrtofotomapa(cls.iface_mock, is_tested=True)
 
@@ -135,7 +135,7 @@ class TestGeoportalFutureProof(unittest.TestCase):
                     f"Rok {year}: {result_entry['reason']}"
                 )
                 
-                # Cleanup layer to avoid QWaitCondition errors
+                # Warstwa sprzatajaca by uniknac bledu typu QWaitCondition
                 del layer
 
 if __name__ == "__main__":

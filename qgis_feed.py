@@ -13,8 +13,8 @@ from .utils import MessageUtils, ThemeUtils
 
 PLUGIN_DIR = os.path.dirname(__file__)
 
-# Prefiks "archiwalnaimg:" używany w url(...) arkusza stylów w ui/qgis_feed.ui (strzałka listy).
-# Ścieżki wyszukiwania QDir są wspólne dla całego QGIS, więc prefiks musi być unikalny dla wtyczki.
+# Prefiks "archiwalnaimg:" uzywany w url(...) arkusza stylow w ui/qgis_feed.ui (strzalka listy).
+# Sciezki wyszukiwania QDir sa wspolne dla calego QGIS, wiec prefiks musi byc unikalny dla wtyczki.
 QDir.addSearchPath('archiwalnaimg', os.path.join(PLUGIN_DIR, 'icons'))
 
 
@@ -48,11 +48,11 @@ class QgisFeed:
 
     def createSlug(self, text):
         """
-        This function makes slug from a random text
+        Funkcja przetwara cztelny tekst i robi z niego fragment adresu URL (ang. slug)
         """
         slug = self.normalizeString(text)
-        slug = re.sub(r'[^a-z0-9\s-]', '', slug.lower())  # Remove non-alphanumeric characters except spaces and hyphens
-        slug = re.sub(r'[\s]+', '-', slug)  # Replace spaces with hyphens
+        slug = re.sub(r'[^a-z0-9\s-]', '', slug.lower()) # Usuwa znaki niealfanumeryczne (znaki, ktore nie sa czescia alfabetu) bez spacji i myslnikow 
+        slug = re.sub(r'[\s]+', '-', slug)  # Zamienia spacje na myslniki
 
         return slug.strip('-')
 
@@ -62,7 +62,7 @@ class QgisFeed:
 
     def registerFeed(self):
         """
-        Function registers QGIS Feed
+        Funkcja do rejestracji QGIS Feed
         """
         MessageUtils.pushLogInfo('Zapisuję feed')
         for key in self.s.allKeys():
@@ -84,7 +84,7 @@ class QgisFeed:
 
     def removeDismissed(self):
         """
-        Function checks whether there was already initialized QGIS Feed
+        Funkcja sprawdzajaca, czy QGIS Feed byl juz zainicjalizowany
         """
 
         for key in self.s.allKeys():
@@ -101,14 +101,14 @@ class QgisFeed:
 
     def checkIsFetchTime(self):
         """
-        Function check if the fetch time from QGIS Feed was already registered
+        Funkcja sprawdzajaca czy czas pobrania z QGIS Feed zostal juz zarejestrowany
         """
         return self.s.contains(f"core/NewsFeed/{self.industry_url_short}/lastFetchTime") \
             or self.s.contains(f"app/news-feed/items/{self.industry_url_short}/last-fetch-time")
 
     def initFeed(self):
         """
-        Function is a built in QGIS class and it is responsible for firing QGIS Feed
+        Wbudowana funkcja w QGIS, ktora uruchamia okno QGIS Feed
         """
 
         check_fetch = self.checkIsFetchTime()
@@ -126,7 +126,7 @@ class QgisFeedDialog(QDialog):
 
         self.comboBox = self.findChild(QComboBox, 'comboBox')
         self.pushButton = self.findChild(QPushButton, 'pushButton')
-        # lista branż z constants.INDUSTRIES (kolejność słownika = kolejność na liście)
+        # lista branz z constants.INDUSTRIES (kolejnosc slownika = kolejnosc na liscie)
         self.comboBox.clear()
         for code, name in INDUSTRIES.items():
             self.comboBox.addItem(name, code)
@@ -137,7 +137,9 @@ class QgisFeedDialog(QDialog):
 
     # ------------------------------- Motyw -----------------------------------
     def _applyTheme(self, force=False):
-        """Ustawia właściwość "theme" – kolory są zdefiniowane w arkuszu stylów ui/qgis_feed.ui."""
+        """
+        Ustawia wlasciwosc "theme" - kolory sa zdefiniowane w arkuszu stylow ui/qgis_feed.ui
+        """
         theme = 'dark' if ThemeUtils.isDarkTheme() else 'light'
         if theme == self._theme and not force:
             return
@@ -147,18 +149,20 @@ class QgisFeedDialog(QDialog):
         self._setLogo()
 
     def _setLogo(self, height=30):
-        """Logo w stopce: zielone na jasnym tle, białe na ciemnym (FOOTER_LOGOS w constants)."""
+        """
+        Logo w stopce: zielone na jasnym tle, biale na ciemnym (FOOTER_LOGOS w constants)
+        """
         if self._theme is not None:
             ThemeUtils.setLogo(self.lbl_logo, FOOTER_LOGOS[self._theme], height)
 
     def showEvent(self, event):
         self._applyTheme()
         super().showEvent(event)
-        # dopiero po pokazaniu znana jest skala ekranu – inaczej logo jest rozpikselowane
+        # dopiero po pokazaniu znana jest skala ekranu - inaczej logo jest rozpikselowane
         self._setLogo()
 
     def changeEvent(self, event):
-        # changeEvent przychodzi już w trakcie loadUi – wtedy _theme jeszcze nie istnieje
+        # changeEvent przychodzi juz w trakcie loadUi - wtedy _theme jeszcze nie istnieje
         if (event.type() in (QEvent.Type.PaletteChange, QEvent.Type.StyleChange)
                 and getattr(self, '_theme', None) is not None):
             self._applyTheme()
