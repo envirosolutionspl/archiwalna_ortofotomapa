@@ -49,9 +49,9 @@ class ArchiwalnaOrtofotomapaDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         """Constructor."""
 
         super().__init__(parent)
-        # Set up the user interface from Designer.  
-        # After setupUI you can access any designer object by doing
-        # self.<objectname>, and you can use autoconnect slots - see
+        # Budowanie interfejsu uzytkownika zaprojektowanego w QT Designerze  
+        # Po wywolaniu SetupUi dostep do dowolnego obiektu z designera
+        # mozna uzyskac poprzez self.<objectname>, sposob automatyczny zobacz:
         # http://doc.qt.io/qt-5/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
@@ -63,19 +63,19 @@ class ArchiwalnaOrtofotomapaDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self._fitPending = False
         self.widget().installEventFilter(self)
 
-        # Store current year
+        # Przechowuje obecny rok
         self.currentYear = datetime.now().year
         self.lbl_minYear.setText(str(OLDEST_ORTO_YEAR))
         self.lbl_maxYear.setText(str(self.currentYear))
         
-        # Initialize slider min/max values
+        # Inicjalizuje wartosc min/max dla slidera
         self.time_slider.setMinimum(OLDEST_ORTO_YEAR)
         self.time_slider.setMaximum(self.currentYear)
         
-        # Internal state for slider
+        # Wewnetrzny stan dla slidera
         self.isSliderPressed = False
         
-        # Set slider to current year by default
+        # Ustawia aktualny rok na ten domyslny
         self.setSliderToMaxYear()
         self._updateNavButtons()
 
@@ -85,7 +85,7 @@ class ArchiwalnaOrtofotomapaDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
             return
         self._theme = theme
         self.widget().setProperty('theme', theme)
-        # The header sits in the dock's title bar, outside the contents widget
+        # Naglowek jest na pasku tytulu docku, poza zawartoscia widgetu
         self.titleBarWidget().setProperty('theme', theme)
         ThemeUtils.repolishAll(self)
         color = FOOTER_LINK_COLORS[theme]
@@ -110,16 +110,20 @@ class ArchiwalnaOrtofotomapaDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         super().changeEvent(event)
 
     def _scheduleFit(self):
-        """Runs _fitHeightToContents once the pending layout events are processed,
-        so nested layouts report heights for the current width, not a stale one."""
+        """
+        Uruchamia _fitHeightToContents dopiero po przetworzeniu oczekujacych zdarzen
+        ukladu, aby zagniezdzone uklady podawaly wysokosc dla biezacej szerokosci
+        """
         if not self._fitPending:
             self._fitPending = True
             QTimer.singleShot(0, self._fitHeightToContents)
 
     def _fitHeightToContents(self):
-        """Sets the contents minimum height to what the current width needs:
-        Qt counts the word-wrapped info text as one line, so without this
-        the smallest dock would clip it."""
+        """
+        Ustawia minimalna wysokosc na taka jaka jest potrzebna dla obecnej szerokosci okna
+        ze wzgledu na to ze QT liczy tekst zawiniety jako jedna linia, a nie dwie wiec bez
+        tego ucinaloby to tekst
+        """
         self._fitPending = False
         contents = self.widget()
         layout = contents.layout()
@@ -130,9 +134,9 @@ class ArchiwalnaOrtofotomapaDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
             contents.setMinimumHeight(needed)
 
     def eventFilter(self, obj, event):
-        # Watch the contents widget itself, not the dock: its width can change
-        # without the dock being resized (docking, restoring QGIS layout), and
-        # LayoutRequest covers text or font changes inside it.
+        # Obserwuj sam widget z zawartoscia, a nie panel dokowany:
+        # szerokosc moze sie zmienic bez zmiany rozmiaru panelu (np. dockowaniu lub przywroceniu okien QGIS), a
+        # zdarzenie zadania przeliczenia ukladu (LayoutRequest) wychwytuje zmiany tekstu lub czcionki we wnetrzu
         if obj is self.widget() and event.type() in (QEvent.Type.Resize, QEvent.Type.LayoutRequest):
             self._scheduleFit()
         return super().eventFilter(obj, event)
@@ -159,7 +163,9 @@ class ArchiwalnaOrtofotomapaDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.btn_first.setEnabled(not at_min)
 
     def setSliderToMaxYear(self):
-        """Sets the slider to the maximum year (current year)."""
+        """
+        Ustawia slider na maksymalny rok (aktualny)
+        """
         self.currentYear = datetime.now().year
         self.time_slider.setMaximum(self.currentYear)
         self.time_slider.setSliderPosition(self.currentYear)
@@ -172,8 +178,10 @@ class ArchiwalnaOrtofotomapaDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         QDesktopServices.openUrl(QUrl(url))  
 
     def _takeHeader(self):
-        """Moves the header out of the contents into a container used as the
-        dock's title bar, so the dock is dragged and docked by the header."""
+        """
+        Przenosi naglowek z zawartosci do kontenera pelniacego role
+        tytulu docka, dzieki czemu dock jest przeciagany i dockowany za naglowek
+        """
         contents = self.widget()
         contents.layout().removeWidget(self.headerFrame)
         container = QtWidgets.QWidget(self)
