@@ -51,7 +51,7 @@ class QgisFeed:
         Funkcja przetwara cztelny tekst i robi z niego fragment adresu URL (ang. slug)
         """
         slug = self.normalizeString(text)
-        slug = re.sub(r'[^a-z0-9\s-]', '', slug.lower()) # Usuwa znaki niealfanumeryczne (znaki, ktore nie sa czescia alfabetu) bez spacji i myslnikow 
+        slug = re.sub(r'[^a-z0-9\s-]', '', slug.lower())  # Usuwa znaki niealfanumeryczne (znaki, ktore nie sa czescia alfabetu) bez spacji i myslnikow 
         slug = re.sub(r'[\s]+', '-', slug)  # Zamienia spacje na myslniki
 
         return slug.strip('-')
