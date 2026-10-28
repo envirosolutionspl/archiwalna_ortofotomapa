@@ -21,7 +21,7 @@ class MessageUtils:
         QgsMessageLog.logMessage(
             message,
             tag=PLUGIN_NAME,
-            level=Qgis.MessageLevel.Info
+            level=Qgis.Info
         )
 
     @staticmethod
@@ -29,7 +29,7 @@ class MessageUtils:
         QgsMessageLog.logMessage(
             message,
             tag=PLUGIN_NAME,
-            level=Qgis.MessageLevel.Warning
+            level=Qgis.Warning
         )
 
     @staticmethod
@@ -37,7 +37,7 @@ class MessageUtils:
         QgsMessageLog.logMessage(
             message,
             tag=PLUGIN_NAME,
-            level=Qgis.MessageLevel.Critical
+            level=Qgis.Critical
         )
 
 class ThemeUtils:

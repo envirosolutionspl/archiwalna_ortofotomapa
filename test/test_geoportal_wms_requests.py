@@ -4,13 +4,6 @@ import os
 import importlib 
 from unittest.mock import MagicMock
 from .constants import YEARS 
-from qgis.PyQt.QtCore import QObject, QT_VERSION_STR
-from qgis.PyQt.QtNetwork import QNetworkRequest
-from qgis.core import (
-    QgsApplication,
-    QgsRasterLayer,
-    QgsNetworkAccessManager
-)
 
 # Dynamiczna sciezka i konfiguracja nazwy pakietu
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -20,6 +13,14 @@ sys.path.insert(0, plugins_dir)
 
 # nazwa folderu wtyczki
 plugin_package_name = os.path.basename(plugin_dir)
+
+from qgis.PyQt.QtCore import QObject, QT_VERSION_STR
+from qgis.PyQt.QtNetwork import QNetworkRequest
+from qgis.core import (
+    QgsApplication,
+    QgsRasterLayer,
+    QgsNetworkAccessManager
+)
 
 # Dynamiczne importowanie utilsow z wykorzystaniem ustalonej nazwy pakietu
 utils_module = importlib.import_module(f"{plugin_package_name}.utils")
@@ -38,7 +39,12 @@ class NetworkLogger(QObject):
 
     def on_finished(self, reply):
         # Uzycie funkcji utils do sprawdzenia wersji QT tak jak w kodzie glownej wtyczki
-        attr = QNetworkRequest.Attribute.HttpStatusCodeAttribute
+        if Utils.isCompatibleQtVersion(QT_VERSION_STR, 6):
+             # Qt6
+            attr = QNetworkRequest.Attribute.HttpStatusCodeAttribute
+        else:
+            # Qt5
+            attr = QNetworkRequest.HttpStatusCodeAttribute
             
         self.last_status = reply.attribute(attr)
         self.last_error = reply.error()
@@ -131,7 +137,6 @@ class TestGeoportalFutureProof(unittest.TestCase):
                 
                 # Warstwa sprzatajaca by uniknac bledu typu QWaitCondition
                 del layer
-
 
 if __name__ == "__main__":
     unittest.main()
