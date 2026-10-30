@@ -8,12 +8,6 @@ from . import PLUGIN_NAME
 
 PLUGIN_DIR = os.path.dirname(__file__)
 
-class QtUtils:
-    
-    @staticmethod
-    def isCompatibleQtVersion(cur_version, tar_version):
-        return cur_version.startswith(QT_VER[tar_version])
-
 class MessageUtils:
 
     @staticmethod
@@ -21,7 +15,7 @@ class MessageUtils:
         QgsMessageLog.logMessage(
             message,
             tag=PLUGIN_NAME,
-            level=Qgis.Info
+            level=Qgis.MessageLevel.Info
         )
 
     @staticmethod
@@ -29,7 +23,7 @@ class MessageUtils:
         QgsMessageLog.logMessage(
             message,
             tag=PLUGIN_NAME,
-            level=Qgis.Warning
+            level=Qgis.MessageLevel.Warning
         )
 
     @staticmethod
@@ -37,7 +31,7 @@ class MessageUtils:
         QgsMessageLog.logMessage(
             message,
             tag=PLUGIN_NAME,
-            level=Qgis.Critical
+            level=Qgis.MessageLevel.Critical
         )
 
 class ThemeUtils:
