@@ -4,7 +4,7 @@ import os
 import importlib 
 from unittest.mock import MagicMock
 from .constants import YEARS 
-from qgis.PyQt.QtCore import QObject, QT_VERSION_STR
+from qgis.PyQt.QtCore import QObject
 from qgis.PyQt.QtNetwork import QNetworkRequest
 from qgis.core import (
     QgsApplication,
@@ -21,10 +21,6 @@ sys.path.insert(0, plugins_dir)
 # nazwa folderu wtyczki
 plugin_package_name = os.path.basename(plugin_dir)
 
-# Dynamiczne importowanie utilsow z wykorzystaniem ustalonej nazwy pakietu
-utils_module = importlib.import_module(f"{plugin_package_name}.utils")
-Utils = utils_module.QtUtils
-
 class NetworkLogger(QObject):
     def __init__(self):
         super().__init__()
@@ -37,7 +33,6 @@ class NetworkLogger(QObject):
         self.reply_received = False 
 
     def on_finished(self, reply):
-        # Uzycie funkcji utils do sprawdzenia wersji QT tak jak w kodzie glownej wtyczki
         attr = QNetworkRequest.Attribute.HttpStatusCodeAttribute
             
         self.last_status = reply.attribute(attr)

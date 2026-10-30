@@ -23,7 +23,7 @@
  This script initializes the plugin, making it known to QGIS.
 """
 
-from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt, QT_VERSION_STR, QTimer
+from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt, QTimer
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QToolBar, QApplication, QWidget, QLabel, QDialog, QComboBox
 from qgis.PyQt import uic
@@ -37,7 +37,7 @@ from qgis.core import QgsRasterLayer, QgsProject, Qgis, QgsNetworkAccessManager
 from .archiwalna_ortofotomapa_dockwidget import ArchiwalnaOrtofotomapaDockWidget
 import os.path
 from . import PLUGIN_VERSION as plugin_version
-from .utils import MessageUtils, QtUtils
+from .utils import MessageUtils
 from . import PLUGIN_NAME as plugin_name
 from .constants import ORTO_SERVICE_URL, WMS_BASE_PARAMS, WMS_TIME_SUFFIX, INITIAL_SCALE, INDUSTRIES
 

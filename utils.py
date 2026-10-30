@@ -8,12 +8,6 @@ from . import PLUGIN_NAME
 
 PLUGIN_DIR = os.path.dirname(__file__)
 
-class QtUtils:
-    
-    @staticmethod
-    def isCompatibleQtVersion(cur_version, tar_version):
-        return cur_version.startswith(QT_VER[tar_version])
-
 class MessageUtils:
 
     @staticmethod
