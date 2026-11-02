@@ -23,7 +23,7 @@
  This script initializes the plugin, making it known to QGIS.
 """
 
-from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt, QT_VERSION_STR, QTimer
+from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt, QTimer
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QToolBar, QApplication, QWidget, QLabel, QDialog, QComboBox
 from qgis.PyQt import uic
@@ -31,13 +31,13 @@ from datetime import datetime
 from qgis.core import QgsSettings
 from .qgis_feed import QgisFeedDialog
 # Inicjalizuje zasoby QT z pliku resources.py
-from .resources import *
+from .resources import *  # noqa: F403
 from qgis.core import QgsRasterLayer, QgsProject, Qgis, QgsNetworkAccessManager
 # Import kodu dla dockwidget
 from .archiwalna_ortofotomapa_dockwidget import ArchiwalnaOrtofotomapaDockWidget
 import os.path
 from . import PLUGIN_VERSION as plugin_version
-from .utils import MessageUtils, QtUtils
+from .utils import MessageUtils
 from . import PLUGIN_NAME as plugin_name
 from .constants import ORTO_SERVICE_URL, WMS_BASE_PARAMS, WMS_TIME_SUFFIX, INITIAL_SCALE, INDUSTRIES
 
@@ -127,10 +127,10 @@ class ArchiwalnaOrtofotomapa:
 
         # --------------------------------------------------------------------------
 
-
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
-        """Get the translation for a string using Qt translation API.
+        """
+        Get the translation for a string using Qt translation API.
 
         We implement this ourselves since we do not inherit QObject.
 
@@ -154,9 +154,11 @@ class ArchiwalnaOrtofotomapa:
         add_to_toolbar=True,
         status_tip=None,
         whats_this=None,
-        parent=None):
+        parent=None
+    ):
 
-        """Add a toolbar icon to the toolbar.
+        """
+        Add a toolbar icon to the toolbar.
 
         :param icon_path: Path to the icon for this action. Can be a resource
             path (e.g. ':/plugins/foo/bar.png') or a normal file system path.
@@ -239,7 +241,7 @@ class ArchiwalnaOrtofotomapa:
         """
 
         # Odlaczenie sygnalow
-        #self.dockwidget.closingPlugin.disconnect(self.onClosePlugin)
+        # self.dockwidget.closingPlugin.disconnect(self.onClosePlugin)
 
         # Instrukcja do usuniecia jesli dockwidget pozostaje
         # Do ponownego uzycia po ponownym otwarciu wtyczki
@@ -260,12 +262,12 @@ class ArchiwalnaOrtofotomapa:
             self.iface.removePluginMenu(
                 self.tr(u'&EnviroSolutions'),
                 action)
-            #self.iface.removeToolBarIcon(action)
+            # self.iface.removeToolBarIcon(action)
             self.toolbar.removeAction(action)
         # Usuwa pasek narzedzi
         del self.toolbar
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
 
 
     def run(self):
@@ -276,7 +278,7 @@ class ArchiwalnaOrtofotomapa:
 
         if not self.pluginIsActive:
             self.pluginIsActive = True
-            #print "** STARTING ArchiwalnaOrtofotomapa"
+            # print "** STARTING ArchiwalnaOrtofotomapa"
             if self.orto:
                 self.orto.willBeDeleted.disconnect()
                 self.project.removeMapLayer(self.orto)
@@ -291,10 +293,8 @@ class ArchiwalnaOrtofotomapa:
 
             # Pokazywanie dockwidgetu
             # TODO: Nalezy to naprawic, aby pokazywalo lokalizacje docku
-            if QtUtils.isCompatibleQtVersion(QT_VERSION_STR, 6):
-                dock_location = Qt.DockWidgetArea.LeftDockWidgetArea
-            else:
-                dock_location = Qt.LeftDockWidgetArea
+            dock_location = Qt.DockWidgetArea.LeftDockWidgetArea
+ 
             
             self.iface.addDockWidget(dock_location, self.dockwidget)
             self.dockwidget.show()
@@ -320,7 +320,7 @@ class ArchiwalnaOrtofotomapa:
             QTimer.singleShot(500, self.applyInitialScale)
 
         else:
-            #reopened
+            # reopened
             pass
 
     def applyInitialScale(self):
