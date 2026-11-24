@@ -29,7 +29,8 @@ from qgis.PyQt.QtWidgets import QAction, QToolBar, QApplication, QWidget, QLabel
 from qgis.PyQt import uic
 from datetime import datetime
 from qgis.core import QgsSettings
-from .qgis_feed import QgisFeedDialog
+from .qgis_feed import EnviroFeedManager
+from .qgis_feed_dialog import QgisFeedDialog
 # Inicjalizuje zasoby QT z pliku resources.py
 from .resources import *  # noqa: F403
 from qgis.core import QgsRasterLayer, QgsProject, Qgis, QgsNetworkAccessManager
@@ -39,7 +40,7 @@ import os.path
 from . import PLUGIN_VERSION as plugin_version
 from .utils import MessageUtils
 from . import PLUGIN_NAME as plugin_name
-from .constants import ORTO_SERVICE_URL, WMS_BASE_PARAMS, WMS_TIME_SUFFIX, INITIAL_SCALE, INDUSTRIES
+from .constants import ORTO_SERVICE_URL, WMS_BASE_PARAMS, WMS_TIME_SUFFIX, INITIAL_SCALE
 
 
 
@@ -59,28 +60,13 @@ class ArchiwalnaOrtofotomapa:
         # (przed QGIS Feed - okno wyboru branzy potrzebuje iface.mainWindow() jako rodzica)
         self.iface = iface
 
+        self.feed_manager = None
         if not is_tested:
             self.settings = QgsSettings()
 
             if Qgis.QGIS_VERSION_INT >= 31000:
-                from .qgis_feed import QgisFeed
-
-                # qgis feed
-                self.selected_industry = self.settings.value("selected_industry", None)
-                show_dialog = self.settings.value("showDialog", True, type=bool)
-
-                # Wczytywanie branzy jezeli nie jest zgodna z aktualnym slownikiem
-                if self.selected_industry not in INDUSTRIES.values():
-                    self.selected_industry = None
-                    show_dialog = True
-
-                if self.selected_industry is None and show_dialog:
-                    self.showBranchSelectionDialog()
-
-                select_indust_session = self.settings.value('selected_industry')
-
-                self.feed = QgisFeed(selected_industry=select_indust_session, plugin_name=plugin_name)
-                self.feed.initFeed()
+                self.feed_manager = EnviroFeedManager(iface, plugin_name, QgisFeedDialog)
+                self.feed_manager.start()
 
         self.project = QgsProject.instance()
         self.nam = QgsNetworkAccessManager.instance()
@@ -258,6 +244,10 @@ class ArchiwalnaOrtofotomapa:
         Usuwa menu wtyczki i ikonke z interfejsu QGIS
         """
 
+        if self.feed_manager is not None:
+            self.feed_manager.unload()
+            self.feed_manager = None
+
         for action in self.actions:
             self.iface.removePluginMenu(
                 self.tr(u'&EnviroSolutions'),
@@ -329,14 +319,6 @@ class ArchiwalnaOrtofotomapa:
         """
         self.canvas.zoomScale(INITIAL_SCALE)
         self.canvas.refresh()
-
-    def showBranchSelectionDialog(self):
-        """
-        Wyswietla dialog wyboru branzy dla QGIS Feed
-        """
-        dialog = QgisFeedDialog(self.iface.mainWindow())
-        dialog.exec()
-        self.selected_industry = self.settings.value("selected_industry", None)
 
     def ortoRemoval(self):
         """
